@@ -1,0 +1,61 @@
+---
+title: "R Notebook - Data Visualization - Wendy Visualization "
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+# load all redfin data into the data frame 
+Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
+```
+
+```{r}
+# filter to just neighborhood records - the full set has by zipcode, and other breakdowns 
+neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
+```
+
+```{r}
+# load the list of unique neighborhoods into an array for iteration
+neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
+```
+
+```{r}
+# loop through all the neighborhoods and for each create a timeseries and print the plot
+for (neighborhood in neighborhoods.array){
+  # use if just want to look at one neighborhood: 
+  # for (neighborhood in c("Portland, OR - Rose City Park")
+  
+  # select a neighborhood into a DataFrame
+   oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
+   
+  # filter out the observations for months that aren't January (1), April (4), July (7), October (10).
+   # had to invert, so selected onesthat did not have these patterns matched
+   oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin,
+                                               
+   # somehow they are out of order, now to sort the period.begin
+   oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format='%m/%d/%Y'),
+   dat1 <- oneNeighborhood.df,# save for debugging prior to removing columns
+   
+   #log how many rows each neighboorhood has available
+   cat(neighborhood, "has", nrow(oneNeighborhood.df), "rows. \n")
+   
+   # select the median price column for the time series
+   oneNeighborhood.df <- oneNeighborhood.df[c(18)]
+   
+   # create the timeseries
+   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+   
+   # plot and set title to the appropriate heading 
+   plot(oneNeighborhood.timeseries, main=neighborhood)
+   
+}
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
