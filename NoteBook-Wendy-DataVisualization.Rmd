@@ -1,5 +1,6 @@
 ---
-title: "R Notebook - Data Visualization - Wendy Visualization "
+title: "Portland Neighborhood Housing Price Prediction by Neighborhood"
+Author: "Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan Hoo-fatt, Jerrod Thomas"
 output: html_notebook
 ---
 
