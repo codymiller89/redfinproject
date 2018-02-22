@@ -1,14 +1,27 @@
 ---
-title: "Portland Neighborhood Housing Price Prediction by Neighborhood"
+title: "Portland Housing Price Prediction by Neighborhood"
 Author: "Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan Hoo-fatt, Jerrod Thomas"
 output: html_notebook
 ---
+##Introduction
+For our team project we chose to do an analysis of real estate pricing information for Portland Oregon. Our hypothesis and interest was to predict how quickly we believe the median housing price will climb in the areas, break that into geographic regions, and try to identify any major trends from this prediction. Exceptional growth in urban housing prices has led to gentrification to many urban towns in recent days. With Portland being one of the most attrative cities to move to, housing prices, new development, and decades of strong urban renewal projects have culminated in housing prices soaring faster than almost all other American cities. 
 
-Test change 
+##Business problem
+in order to better understand the trends involved, we will be analyzing the trends in housing prices and attempt to predict the future prices of housing by neighborhood. This will provide us an indication of affordability and allow us to predict where the next bursts in housing price inflation might occur. If you are in real estate, then you should invest in these areas. If you are a liberal city planner, you should focus your anti-gentrification and housing subsidy efforts to reduce displacement in the local populations.
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+##Relevant data driven, analytical work in this area
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+##Data Source, Data Exploration, Descriptive Statistics, Variable Selection
+
+
+##Methodologies Considered
+
+
+##Next Steps
+
+
+##References
 
 ```{r}
 # load all redfin data into the data frame 
