@@ -7,24 +7,36 @@ output: html_notebook
 library(dplyr)
 
 ##Introduction
-For our team project we chose to do an analysis of real estate pricing information for Portland Oregon. Our hypothesis and interest was to predict how quickly we believe the median housing price will climb in the areas, break that into geographic regions, and try to identify any major trends from this prediction. Exceptional growth in urban housing prices has led to gentrification to many urban towns in recent days. With Portland being one of the most attrative cities to move to, housing prices, new development, and decades of strong urban renewal projects have culminated in housing prices soaring faster than almost all other American cities. 
+For our team project we chose to do an analysis of real estate pricing information for Portland Oregon. Our interest is to predict how quickly the median housing price will climb within the city. We will break that into geographic regions, and try to identify any major trends from this prediction. 
+Exceptional growth in urban housing prices has led to gentrification to many urban towns in recent days. With Portland being one of the most attrative cities to move to, housing prices, new development, and decades of strong urban renewal projects have culminated in housing prices soaring faster than most other American cities. 
 
 ##Business problem
-in order to better understand the trends involved, we will be analyzing the trends in housing prices and attempt to predict the future prices of housing by neighborhood. This will provide us an indication of affordability and allow us to predict where the next bursts in housing price inflation might occur. If you are in real estate, then you should invest in these areas. If you are a liberal city planner, you should focus your anti-gentrification and housing subsidy efforts to reduce displacement in the local populations.
+In order to better understand the Portland housing market, we will be analyzing the trends in housing prices and attempt to predict the future prices of housing by neighborhood. This will provide us an indication of affordability and allow us to predict where the next bursts in housing price inflation might occur. If you are in real estate, then you should invest in these areas. If you are a city planner, you should focus your anti-gentrification and housing affordability efforts in these neighborhoods to reduce displacement in the local populations.
 
 ##Relevant data driven, analytical work in this area
-
+The majority of our work has focused on the isolation of approriate data from our initial dataset and preparation for time series analysis. There are a number of research papers evaluating this particular topic of affordability in metropolitan areas and some specifically in Portland. [Oregon Live is hosting an interactive map on this topic](https://projects.oregonlive.com/maps/gentrification/), showcasing similar results to those that we are seeking to understand: what neighborhoods are under pressure from gentrification and which are likely to be next. 
 
 ##Data Source, Data Exploration, Descriptive Statistics, Variable Selection
+Our data was sourced from the Redfin Data Center. The dataset was quite large and we initially reviewed the 47 variables for validity with our analysis in mind. We ultimately limited this to 13 variables, seven related to cost and availability which could be used for our preditinos. Another three variables related to the time series, and three related to the regions were selected to allow us to do appropriate filtering of our dataset from a nationwide, nearly 1.5 gigabyte CSV into a more manageable, Oregon-only dataset. 
 
+As part of our data cleaning, we realized that the dataset periods offered were 90 day time slices, so we decided to select periods of January-March, April-June, July-September, and October-December in order to avoid overlapping data sets. It does appears that Redfin's analysis of this data used each 90-day average to represent the month in which the period ended. This causes some overlapping but also results in smoother data and more data points. If we ultimately decide that four data points per year is too few, we may consider re-factoring our data segmentation in a similar way.
 
 ##Methodologies Considered
-
+With the project selection, we are limited to time series-based modeling. We initially used the linear trend time series modeling technique and compared this to the naive approach. We are also considering using a model involving trend and seasonality
 
 ##Next Steps
+*Run time series model on training and validation sets
+*Try various time series models and compare accuracy
+  +Trend and seasonality
+  +Linear, and polynomial 
+  +Naive
+*Continue building report and narrative
+*Beautify visualizations
 
 
 ##References
+[Redfin Data Center: Downloadable Housing Market Data From Redfin](https://www.redfin.com/blog/data-center)
+[Gentrification and Displacement Study: implementing an equitable inclusive development strategy in the context of gentrification](https://www.portlandoregon.gov/bps/article/454027)
 ```{r}
 # load all redfin data into the data frame
 Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
@@ -100,9 +112,3 @@ for (neighborhood in neighborhoods.array){
 }
 
 ```
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
