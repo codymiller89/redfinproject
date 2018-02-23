@@ -3,9 +3,7 @@ title: "Portland Housing Price Prediction by Neighborhood"
 Author: "Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan Hoo-fatt, Jerrod Thomas"
 output: html_notebook
 ---
-
-library(dplyr)
-
+# Tabset {.tabset .tabset-fade .tabset-pills}
 ##Introduction
 For our team project we chose to do an analysis of real estate pricing information for Portland Oregon. Our interest is to predict how quickly the median housing price will climb within the city. We will break that into geographic regions, and try to identify any major trends from this prediction. 
 Exceptional growth in urban housing prices has led to gentrification to many urban towns in recent days. With Portland being one of the most attrative cities to move to, housing prices, new development, and decades of strong urban renewal projects have culminated in housing prices soaring faster than most other American cities. 
@@ -22,22 +20,26 @@ Our data was sourced from the Redfin Data Center. The dataset was quite large an
 As part of our data cleaning, we realized that the dataset periods offered were 90 day time slices, so we decided to select periods of January-March, April-June, July-September, and October-December in order to avoid overlapping data sets. It does appears that Redfin's analysis of this data used each 90-day average to represent the month in which the period ended. This causes some overlapping but also results in smoother data and more data points. If we ultimately decide that four data points per year is too few, we may consider re-factoring our data segmentation in a similar way.
 
 ##Methodologies Considered
-With the project selection, we are limited to time series-based modeling. We initially used the linear trend time series modeling technique and compared this to the naive approach. We are also considering using a model involving trend and seasonality
+With the project selection, we are limited to time series-based modeling. We initially used the linear trend time series modeling technique and compared this to the naive approach. We are also considering caomparing the accuracy of these two models to a model involving trend and seasonality if there is time.
 
 ##Next Steps
-*Run time series model on training and validation sets
-*Try various time series models and compare accuracy
-  +Trend and seasonality
-  +Linear, and polynomial 
-  +Naive
-*Continue building report and narrative
-*Beautify visualizations
-
+* Run time series model on training and validation sets
+* Try various time series models and compare accuracy
+    + Trend and seasonality
+    + Linear, and polynomial 
+    + Naive
+* Compare accuracy between these models
+* Create comparison array to evaluate neighborhood predictions
+* Continue building report and narrative
+* Investigate possibility of visualizing with a mapping tool
+* Beautify graphs/visualizations
 
 ##References
 [Redfin Data Center: Downloadable Housing Market Data From Redfin](https://www.redfin.com/blog/data-center)
+
 [Gentrification and Displacement Study: implementing an equitable inclusive development strategy in the context of gentrification](https://www.portlandoregon.gov/bps/article/454027)
 ```{r}
+library(dplyr)
 # load all redfin data into the data frame
 Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
 #Select and summarize only the home variables
@@ -56,7 +58,7 @@ Time_data.df = Oregon.df[, selected.var]
 print("Relavent Location variables summary")
 summary(Time_data.df)
 ```
-
+##Neighborhood Time Series Graphs
 ```{r}
 # filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about
 neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
@@ -76,9 +78,6 @@ neighborhoodsSummary.array <- array()
 
 #We want to store: neighborhood name, timeseries
 neighborhoodsSummary.array <- c("")
-
-
-
 ```
 
 ```{r}
@@ -105,7 +104,6 @@ for (neighborhood in neighborhoods.array){
   
   # create the timeseries
   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
-  
   # plot and set title to the appropriate heading
   plot(oneNeighborhood.timeseries, main=neighborhood)
 
