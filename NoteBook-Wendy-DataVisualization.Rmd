@@ -3,6 +3,9 @@ title: "Portland Housing Price Prediction by Neighborhood"
 Author: "Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan Hoo-fatt, Jerrod Thomas"
 output: html_notebook
 ---
+
+library(dplyr)
+
 ##Introduction
 For our team project we chose to do an analysis of real estate pricing information for Portland Oregon. Our hypothesis and interest was to predict how quickly we believe the median housing price will climb in the areas, break that into geographic regions, and try to identify any major trends from this prediction. Exceptional growth in urban housing prices has led to gentrification to many urban towns in recent days. With Portland being one of the most attrative cities to move to, housing prices, new development, and decades of strong urban renewal projects have culminated in housing prices soaring faster than almost all other American cities. 
 
@@ -19,55 +22,87 @@ in order to better understand the trends involved, we will be analyzing the tren
 
 
 ##Next Steps
-test
+
 
 ##References
-
 ```{r}
-# load all redfin data into the data frame 
+# load all redfin data into the data frame
 Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
+<<<<<<< HEAD
+#Select and summarize only the home variables
+selected.var <-c(2, 6, 9, 24, 27, 30, 39)
+Home_data.df = Oregon.df[, selected.var]
+print("Relavent Housing variables summary")
+summary(Home_data.df)
+#Select and summarize only the time variables 
+selected.var <-c(33, 34, 35)
+Time_data.df = Oregon.df[, selected.var]
+print("Relavent Time variables summary")
+summary(Time_data.df)
+#Select and summarize only the time variables 
+selected.var <-c(40, 41, 45)
+Time_data.df = Oregon.df[, selected.var]
+print("Relavent Location variables summary")
+summary(Time_data.df)
+=======
+
+>>>>>>> 9605ff6b80196dcbbbf0d320304363d8327954aa
 ```
 
 ```{r}
-# filter to just neighborhood records - the full set has by zipcode, and other breakdowns 
+# filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about
 neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
 ```
 
 ```{r}
-# load the list of unique neighborhoods into an array for iteration
+# filter out the last two years to make training data. Doesn't work yet, working on syntax.
+neighborhoods.df <- neighborhoods.df[strptime(neighborhoods.df$Period.Begin, format="%m/%d/%Y") < strptime('1/Jan/2016:00:01:00',format='%d/%b/%Y:%H:%M:%S'),]
+
+# load the training data list of unique neighborhoods into an array for iteration
 neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
 ```
 
 ```{r}
-# loop through all the neighborhoods and for each create a timeseries and print the plot
+# Create a storage array for our results
+neighborhoodsSummary.array <- array()
+
+#We want to store: neighborhood name, timeseries
+neighborhoodsSummary.array <- c("")
+
+
+
+```
+
+```{r}
+#loop through all the neighboorhoods and for each create a timeseries and print the plot
 for (neighborhood in neighborhoods.array){
-  # use if just want to look at one neighborhood: 
-  # for (neighborhood in c("Portland, OR - Rose City Park")
+# use if just want to look at one neighborhood: for (neighborhood in c("Portland, OR - Rose City Park")){
+
+  #select a neighborhood into a dataframe
+  oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
   
-  # select a neighborhood into a DataFrame
-   oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
-   
-  # filter out the observations for months that aren't January (1), April (4), July (7), October (10).
-   # had to invert, so selected onesthat did not have these patterns matched
-   oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin,
-                                               
-   # somehow they are out of order, now to sort the period.begin
-   oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format='%m/%d/%Y'),
-   dat1 <- oneNeighborhood.df,# save for debugging prior to removing columns
-   
-   #log how many rows each neighboorhood has available
-   cat(neighborhood, "has", nrow(oneNeighborhood.df), "rows. \n")
-   
-   # select the median price column for the time series
-   oneNeighborhood.df <- oneNeighborhood.df[c(18)]
-   
-   # create the timeseries
-   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
-   
-   # plot and set title to the appropriate heading 
-   plot(oneNeighborhood.timeseries, main=neighborhood)
-   
+  #filter out the observations for months that aren't January (1), April (4), July (7), October (10). 
+  #Note that had to invert, so selected ones that did not have these patterns matched.
+  oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin, invert = TRUE),]
+
+  # somehow they are out of order, now to sort the period.begin
+  oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format="%m/%d/%Y")),]
+  dat1 <- oneNeighborhood.df # save for debugging prior to removing columns
+  
+  #log how many rows each neighborhood has available
+  cat(neighborhood, " has ", nrow(oneNeighborhood.df), " rows. \n")
+  
+  # select the median price column for the timeseries
+  oneNeighborhood.df <- oneNeighborhood.df[c(18)]
+  
+  # create the timeseries
+  oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+  
+  # plot and set title to the appropriate heading
+  plot(oneNeighborhood.timeseries, main=neighborhood)
+
 }
+
 ```
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
