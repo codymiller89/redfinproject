@@ -29,6 +29,7 @@ in order to better understand the trends involved, we will be analyzing the tren
 # load all redfin data into the data frame
 Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
 <<<<<<< HEAD
+<<<<<<< HEAD
 #Select and summarize only the home variables
 selected.var <-c(2, 6, 9, 24, 27, 30, 39)
 Home_data.df = Oregon.df[, selected.var]
@@ -44,6 +45,9 @@ selected.var <-c(40, 41, 45)
 Time_data.df = Oregon.df[, selected.var]
 print("Relavent Location variables summary")
 summary(Time_data.df)
+=======
+
+>>>>>>> 9605ff6b80196dcbbbf0d320304363d8327954aa
 =======
 
 >>>>>>> 9605ff6b80196dcbbbf0d320304363d8327954aa
