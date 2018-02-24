@@ -3,7 +3,9 @@ title: "Portland Housing Price Prediction by Neighborhood"
 Author: "Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan Hoo-fatt, Jerrod Thomas"
 output: html_notebook
 ---
-# Tabset {.tabset .tabset-fade .tabset-pills}
+
+[//]: # Tabset {.tabset .tabset-fade .tabset-pills}
+
 ##Introduction
 For our team project we chose to do an analysis of real estate pricing information for Portland Oregon. Our interest is to predict how quickly the median housing price will climb within the city. We will break that into geographic regions, and try to identify any major trends from this prediction. 
 Exceptional growth in urban housing prices has led to gentrification to many urban towns in recent days. With Portland being one of the most attrative cities to move to, housing prices, new development, and decades of strong urban renewal projects have culminated in housing prices soaring faster than most other American cities. 
