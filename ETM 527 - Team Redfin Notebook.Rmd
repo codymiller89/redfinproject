@@ -65,11 +65,12 @@ neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
 ```
 
 ```{r}
-# filter out the last two years to make training data. Doesn't work yet, working on syntax.
-neighborhoods.df <- neighborhoods.df[strptime(neighborhoods.df$Period.Begin, format="%m/%d/%Y") < strptime('1/Jan/2016:00:01:00',format='%d/%b/%Y:%H:%M:%S'),]
+# filter out the last two years to make training data. Doesn't work yet, working on syntax.\
+# binary errors - Will evaluate when time 
+# neighborhoods.df <- neighborhoods.df[strptime(neighborhoods.df$Period.Begin, format="%m/%d/%Y") < strptime('1/Jan/2016:00:01:00',format='%d/%b/%Y:%H:%M:%S'),]
 
 # load the training data list of unique neighborhoods into an array for iteration
-neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
+# neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
 ```
 
 ```{r}
