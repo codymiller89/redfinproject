@@ -4,8 +4,6 @@ Author: "Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan 
 output: html_notebook
 ---
 
-[//]: # Tabset {.tabset .tabset-fade .tabset-pills}
-
 ##Introduction
 For our team project we chose to do an analysis of real estate pricing information for Portland Oregon. Our interest is to predict how quickly the median housing price will climb within the city. We will break that into geographic regions, and try to identify any major trends from this prediction. 
 Exceptional growth in urban housing prices has led to gentrification to many urban towns in recent days. With Portland being one of the most attrative cities to move to, housing prices, new development, and decades of strong urban renewal projects have culminated in housing prices soaring faster than most other American cities. 
@@ -41,7 +39,8 @@ With the project selection, we are limited to time series-based modeling. We ini
 
 [Gentrification and Displacement Study: implementing an equitable inclusive development strategy in the context of gentrification](https://www.portlandoregon.gov/bps/article/454027)
 ```{r}
-library(dplyr)
+#Load library and suppress warnings
+suppressWarnings(suppressMessages(library(dplyr)))
 # load all redfin data into the data frame
 Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
 #Select and summarize only the home variables
