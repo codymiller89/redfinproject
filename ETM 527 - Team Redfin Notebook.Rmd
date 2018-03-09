@@ -41,18 +41,22 @@ With the project selection, we are limited to time series-based modeling. We ini
 ```{r}
 #Load library and suppress warnings
 suppressWarnings(suppressMessages(library(dplyr)))
+
 # load all redfin data into the data frame
 Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
+
 #Select and summarize only the home variables
 selected.var <-c(2, 6, 9, 24, 27, 30, 39)
 Home_data.df = Oregon.df[, selected.var]
 print("Relavent Housing variables summary")
 summary(Home_data.df)
+
 #Select and summarize only the time variables 
 selected.var <-c(33, 34, 35)
 Time_data.df = Oregon.df[, selected.var]
 print("Relavent Time variables summary")
 summary(Time_data.df)
+
 #Select and summarize only the time variables 
 selected.var <-c(40, 41, 45)
 Time_data.df = Oregon.df[, selected.var]
@@ -71,8 +75,9 @@ neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
 # neighborhoods.df <- neighborhoods.df[strptime(neighborhoods.df$Period.Begin, format="%m/%d/%Y") < strptime('1/Jan/2016:00:01:00',format='%d/%b/%Y:%H:%M:%S'),]
 
 # load the training data list of unique neighborhoods into an array for iteration
-# neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
+ neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
 ```
+
 
 ```{r}
 # Create a storage array for our results
@@ -86,14 +91,12 @@ neighborhoodsSummary.array <- c("")
 #loop through all the neighboorhoods and for each create a timeseries and print the plot
 for (neighborhood in neighborhoods.array){
 # use if just want to look at one neighborhood: for (neighborhood in c("Portland, OR - Rose City Park")){
-
   #select a neighborhood into a dataframe
   oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
   
   #filter out the observations for months that aren't January (1), April (4), July (7), October (10). 
   #Note that had to invert, so selected ones that did not have these patterns matched.
   oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin, invert = TRUE),]
-
   # somehow they are out of order, now to sort the period.begin
   oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format="%m/%d/%Y")),]
   dat1 <- oneNeighborhood.df # save for debugging prior to removing columns
@@ -108,7 +111,186 @@ for (neighborhood in neighborhoods.array){
   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
   # plot and set title to the appropriate heading
   plot(oneNeighborhood.timeseries, main=neighborhood)
+}
 
+
+```
+
+
+```{r}
+# This section only applies to 1 neighboorhood - ALL neighboorhoods are below
+# Should probally be deprecated, once we submit, this section is for practice
+
+# Load required library
+library(forecast)
+
+# Naive Approach
+# H = Number of periods for forecasting
+plot(naive(oneNeighborhood.timeseries, h = 8))
+plot(naive(oneNeighborhood.timeseries, h = 4))
+
+# Seasonal Naive Method 
+plot(snaive(oneNeighborhood.timeseries, h = 8))
+plot(snaive(oneNeighborhood.timeseries, h = 4))
+
+# Drift Method Method 
+plot(rwf(oneNeighborhood.timeseries, h = 8, drift = T))
+plot(rwf(oneNeighborhood.timeseries, h = 4, drift = T))
+
+# Holt Winters Method 
+plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 8))
+plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 4))
+
+
+```
+
+```{r}
+# Naive Forecast 
+# 8 Period Forecast & 4 Period Forecast
+
+#loop through all the neighboorhoods and for each create a timeseries and print the plot
+for (neighborhood in neighborhoods.array){
+# use if just want to look at one neighborhood: for (neighborhood in c("Portland, OR - Rose City Park")){
+  #select a neighborhood into a dataframe
+  oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
+  
+  #filter out the observations for months that aren't January (1), April (4), July (7), October (10). 
+  #Note that had to invert, so selected ones that did not have these patterns matched.
+  oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin, invert = TRUE),]
+  # somehow they are out of order, now to sort the period.begin
+  oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format="%m/%d/%Y")),]
+  dat1 <- oneNeighborhood.df # save for debugging prior to removing columns
+  
+  #log how many rows each neighborhood has available
+  cat(neighborhood, " has ", nrow(oneNeighborhood.df), " rows. \n")
+  
+  # select the median price column for the timeseries
+  oneNeighborhood.df <- oneNeighborhood.df[c(18)]
+  
+  # create the timeseries
+  oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+  
+  # Apply Forecasting Method to timeseries - Naive Method
+  # 8 Periods
+  plot(naive(oneNeighborhood.timeseries, h = 8))
+  
+  # 4 Periods
+  plot(naive(oneNeighborhood.timeseries, h = 4))
+  
+}
+```
+```{r}
+# Seasonal Naive Forecast 
+# 8 Period Forecast & 4 Period Forecast
+
+library(forecast)
+
+#loop through all the neighboorhoods and for each create a timeseries and print the plot
+for (neighborhood in neighborhoods.array){
+# use if just want to look at one neighborhood: for (neighborhood in c("Portland, OR - Rose City Park")){
+  #select a neighborhood into a dataframe
+  oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
+  
+  #filter out the observations for months that aren't January (1), April (4), July (7), October (10). 
+  #Note that had to invert, so selected ones that did not have these patterns matched.
+  oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin, invert = TRUE),]
+  # somehow they are out of order, now to sort the period.begin
+  oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format="%m/%d/%Y")),]
+  dat1 <- oneNeighborhood.df # save for debugging prior to removing columns
+  
+  #log how many rows each neighborhood has available
+  cat(neighborhood, " has ", nrow(oneNeighborhood.df), " rows. \n")
+  
+  # select the median price column for the timeseries
+  oneNeighborhood.df <- oneNeighborhood.df[c(18)]
+  
+  # create the timeseries
+  oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+  
+  # Apply Forecasting Method to timeseries - Seasonal Naive Method
+  # 8 Periods
+  plot(snaive(oneNeighborhood.timeseries, h = 8))
+  
+  # 4 Periods
+  plot(snaive(oneNeighborhood.timeseries, h = 4))
+  
+}
+```
+
+```{r}
+# Drift Method
+# 8 Period Forecast & 4 Period Forecast
+
+library(forecast)
+
+#loop through all the neighboorhoods and for each create a timeseries and print the plot
+for (neighborhood in neighborhoods.array){
+# use if just want to look at one neighborhood: for (neighborhood in c("Portland, OR - Rose City Park")){
+  #select a neighborhood into a dataframe
+  oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
+  
+  #filter out the observations for months that aren't January (1), April (4), July (7), October (10). 
+  #Note that had to invert, so selected ones that did not have these patterns matched.
+  oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin, invert = TRUE),]
+  # somehow they are out of order, now to sort the period.begin
+  oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format="%m/%d/%Y")),]
+  dat1 <- oneNeighborhood.df # save for debugging prior to removing columns
+  
+  #log how many rows each neighborhood has available
+  cat(neighborhood, " has ", nrow(oneNeighborhood.df), " rows. \n")
+  
+  # select the median price column for the timeseries
+  oneNeighborhood.df <- oneNeighborhood.df[c(18)]
+  
+  # create the timeseries
+  oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+  
+  # Apply Forecasting Method to timeseries - Drift Method
+  # 8 Periods
+  plot(rwf(oneNeighborhood.timeseries, h = 8, drift = T))
+  
+  # 4 Periods
+  plot(rwf(oneNeighborhood.timeseries, h = 4, drift = T))
+  
 }
 
 ```
+
+```{r}
+# Holt Winters Forecast Method
+# 8 Period Forecast & 4 Period Forecast
+
+library(forecast)
+
+#loop through all the neighboorhoods and for each create a timeseries and print the plot
+for (neighborhood in neighborhoods.array){
+# use if just want to look at one neighborhood: for (neighborhood in c("Portland, OR - Rose City Park")){
+  #select a neighborhood into a dataframe
+  oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
+  
+  #filter out the observations for months that aren't January (1), April (4), July (7), October (10). 
+  #Note that had to invert, so selected ones that did not have these patterns matched.
+  oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin, invert = TRUE),]
+  # somehow they are out of order, now to sort the period.begin
+  oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format="%m/%d/%Y")),]
+  dat1 <- oneNeighborhood.df # save for debugging prior to removing columns
+  
+  #log how many rows each neighborhood has available
+  cat(neighborhood, " has ", nrow(oneNeighborhood.df), " rows. \n")
+  
+  # select the median price column for the timeseries
+  oneNeighborhood.df <- oneNeighborhood.df[c(18)]
+  
+  # create the timeseries
+  oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+  
+  # Apply Forecasting Method to timeseries - Holt Winters Method
+  # 8 Periods
+  plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 8))
+  
+  # 4 Periods
+  plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 4))
+  
+}
+```
+
