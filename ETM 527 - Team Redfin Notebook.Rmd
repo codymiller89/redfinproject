@@ -110,6 +110,7 @@ for (neighborhood in neighborhoods.array){
   # create the timeseries
   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
   # plot and set title to the appropriate heading
+  options(scipen=999)
   plot(oneNeighborhood.timeseries, main=neighborhood)
 }
 
@@ -175,7 +176,7 @@ for (neighborhood in neighborhoods.array){
   plot(naive(oneNeighborhood.timeseries, h = 8))
   
   # 4 Periods
-  plot(naive(oneNeighborhood.timeseries, h = 4))
+#  plot(naive(oneNeighborhood.timeseries, h = 4))
   
 }
 ```
@@ -212,7 +213,7 @@ for (neighborhood in neighborhoods.array){
   plot(snaive(oneNeighborhood.timeseries, h = 8))
   
   # 4 Periods
-  plot(snaive(oneNeighborhood.timeseries, h = 4))
+#  plot(snaive(oneNeighborhood.timeseries, h = 4))
   
 }
 ```
@@ -250,7 +251,7 @@ for (neighborhood in neighborhoods.array){
   plot(rwf(oneNeighborhood.timeseries, h = 8, drift = T))
   
   # 4 Periods
-  plot(rwf(oneNeighborhood.timeseries, h = 4, drift = T))
+#  plot(rwf(oneNeighborhood.timeseries, h = 4, drift = T))
   
 }
 
@@ -286,10 +287,10 @@ for (neighborhood in neighborhoods.array){
   
   # Apply Forecasting Method to timeseries - Holt Winters Method
   # 8 Periods
-  plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 8))
+  plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 12))
   
   # 4 Periods
-  plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 4))
+ # plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 4))
   
 }
 ```
