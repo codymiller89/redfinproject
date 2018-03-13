@@ -28,7 +28,7 @@ for (neighborhood in neighborhoods.array){
   
   # divide the timeseries that was created into two parts
   trainingData = window(oneNeighborhood.timeseries, 2012, end=c(2015,4)) ### Training set (4 years, quarterly data)
-  testData = window(oneNeighborhood.timeseries, frequency=4, start=c(2016,1), end=c(2017,4))  ### Test set    (2 years, quarterly data)
+  testData = window(oneNeighborhood.timeseries, start=c(2016,1), end=c(2017,4), frequency=4)  ### Test set    (2 years, quarterly data)
   
   # train on data from 2012 to the end of 2015, Forecast for four more years (2016 through 2019)
   naive.forecast <- snaive(trainingData, h = 16 )

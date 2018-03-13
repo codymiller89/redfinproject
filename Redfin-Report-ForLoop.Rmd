@@ -1,5 +1,5 @@
 
-```{r forloop-plotting}
+```{r}
 # For loop
 #loop through all the neighboorhoods and for each create a timeseries and print the plot
 for (neighborhood in neighborhoods.array){
@@ -22,7 +22,70 @@ for (neighborhood in neighborhoods.array){
   
   # create the timeseries
   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+  
+  # divide the timeseries that was created into two parts
+  trainingData = window(oneNeighborhood.timeseries, start=1, end=16) ### Training set (4 years, quarterly data)
+  testData = window(oneNeighborhood.timeseries, start=17)  ### Test set(2 years, quarterly data)
+  
+  
+  # Generic plot of timeseries without any modeling ---------------------
   # plot and set title to the appropriate heading
   options(scipen=999)
   plot(oneNeighborhood.timeseries, main=neighborhood)
+  
+  
+  # Seasonal Naive Plots --------------------------------------------------
+  
+  # train on data from 2012 to the end of 2015, Forecast for four more years (2016 through 2019)
+  snaive.forecast <- snaive(trainingData, h = 16 )
+
+  # Forecast plot for Seasonal Naive ---------
+  plotTitle <- paste(neighborhood, ": Naive Model Forecast")
+  options(scipen=999)
+  # plots both the train data, test data and prediction
+  plot(snaive.forecast, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
+  lines(testData, col="red") # color the test data to tell it from the train data
+  legend("topleft",lty=1,bty = "n",col=c("black", "red","blue"),c("Train Data", "Test Data","Seasonal Naive"))
+
+  # Plot Seasonal Naive Accuracy ---------
+  snaive.accuracy <- accuracy(snaive.forecast,testData)
+  options(scipen=999)
+  tsdisplay(residuals(snaive.forecast), main = paste(plotTitle, " Residuals"))
+  
+  # Holt Winters Plots -----------------------------------------------------
+  
+    # Apply Forecasting Method to timeseries - Holt Winters Method
+  hwinters.forecast <- forecast(HoltWinters(oneNeighborhood.timeseries), h = 16)
+
+  # Forecast plot for Holt Winters ---------
+  plotTitle <- paste(neighborhood, ": Holt Winters Model Forecast")
+  options(scipen=999)
+  # plots both the train data, test data and prediction
+  plot(hwinters.forecast, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
+  lines(testData, col="red") # color the test data to tell it from the train data
+  legend("topleft",lty=1,bty = "n",col=c("black", "red","blue"),c("Train Data", "Test Data","Holt Winters"))
+
+  # Plot Holt Winters Accuracy ---------
+  hwinters.accuracy <- accuracy(hwinters.forecast,testData)
+  options(scipen=999)
+  tsdisplay(residuals(hwinters.forecast), main = paste(plotTitle, " Residuals"))
+
+  # Compare Accuracy --------------------------------------------------------
+  
+  # Seasonal Naive
+  snaive.accuracy
+  # Holt Winters
+  hwinters.accuracy
+  
+    # Forecast plot for Holt Winters ---------
+  plotTitle <- paste(neighborhood, ": TS Models Comparisson")
+  options(scipen=999)
+  # plots both the train data, test data and both predictions
+  plot(hwinters.forecast, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
+  lines(snaive.forecast, col="green")
+  lines(testData, col="red") # color the test data to tell it from the train data
+  legend("topleft",lty=1,bty = "n",col=c("black", "red","blue", "green"),c("Train Data", "Test Data","Holt Winters", "Seasonal Naive"))
+
+  
+  
 }
