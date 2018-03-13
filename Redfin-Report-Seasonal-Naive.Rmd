@@ -26,20 +26,12 @@ for (neighborhood in neighborhoods.array){
   # create the timeseries
   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
   
-  # Apply Forecasting Method to timeseries - Seasonal Naive Method
-  # 8 Periods
-  #naive.ts <- snaive(oneNeighborhood.timeseries, h = 8)
-  #plot(naive.ts)
-  
   # divide the timeseries that was created into two parts
   trainingData = window(oneNeighborhood.timeseries, 2012, end=c(2015,4)) ### Training set (4 years, quarterly data)
-  testData = window(oneNeighborhood.timeseries, frequency=4, start=c(2016,1), end=c(2017,10))  ### Test set    (2 years, quarterly data)
+  testData = window(oneNeighborhood.timeseries, frequency=4, start=c(2016,1), end=c(2017,4))  ### Test set    (2 years, quarterly data)
   
-  # train on data from 2012 to the end of 2015
+  # train on data from 2012 to the end of 2015, Forecast for four more years (2016 through 2019)
   naive.forecast <- snaive(trainingData, h = 16 )
-
-  #Forecast for two more years (2016 and 2017) to compare to our test data
-  #naive.forecast <-forecast(naive.model,h=8)      ### h is the length of the forecast, in this case 2 years = 4 * 2
 
   # Forecast plot
   plotTitle <- paste(neighborhood, ": Naive Model Forecast")
@@ -48,36 +40,10 @@ for (neighborhood in neighborhoods.array){
   lines(testData, col="red") # color the test data to tell it from the train data
   legend("topleft",lty=1,bty = "n",col=c("black", "red","blue"),c("Train Data", "Test Data","Seasonal Naive"))
 
-  #Quarterly plot with test data
-  #plot(testData, main="Quarterly data", ylab="", xlab="Years", col = "red")  
-  #lines(trainData, col="black")
-  #lines(naive.forecast$mean, col="blue", lwd=3)
-  #legend("topleft",lty=1,bty = "n",col=c("red","blue"),c("Test Data","Seasonal Naive"))
-
   # Plot Accuracy
-  accuracy(naive.forecast,testData)
-  tsdisplay(residuals(naive.model), main = paste(plotTitle, " Residuals"))
-  
-  #fit.ets <- ets(trainData)
-  
-  #fr.ets <- forecast(fit.ets,h=8)
-  
-  #plot(forecast(fit.ets,h=8))
-  
-  #plot(testData)
-  
-  #lines(fr.ets$mean, col="red", lwd=5)
-  #lines(naive.forecast$mean, col="green")
-  #legend("topleft",lty=1,cex=1,y.intersp=0.6,bty = "n",col=c("black", "green"),c("data","Naive"))
-  
-  #accuracy(fr.ets,testData)
-  #accuracy(arimaMod.Fr,testData)
-
-  
-  
-  
-  # 4 Periods
-#  plot(snaive(oneNeighborhood.timeseries, h = 4))
+  snaive.accuracy <- accuracy(naive.forecast,testData)
+  options(scipen=999)
+  tsdisplay(residuals(naive.forecast), main = paste(plotTitle, " Residuals"))
   
 }
 ```
