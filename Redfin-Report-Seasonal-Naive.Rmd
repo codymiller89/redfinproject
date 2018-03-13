@@ -32,28 +32,31 @@ for (neighborhood in neighborhoods.array){
   #plot(naive.ts)
   
   # divide the timeseries that was created into two parts
-  sr = window(oneNeighborhood.timeseries, frequency=4, start=c(2012,1), end=c(2015,10))
-  ser = window(oneNeighborhood.timeseries, frequency=4, start=c(2016,1), end=c(2017,10))
+  trainingData = window(oneNeighborhood.timeseries, 2012, end=c(2015,4)) ### Training set (4 years, quarterly data)
+  testData = window(oneNeighborhood.timeseries, frequency=4, start=c(2016,1), end=c(2017,10))  ### Test set    (2 years, quarterly data)
   
-  trainData <- sr     ### Training set (4 years, quarterly data)
-  testData <- ser     ### Test set    (2 years, quarterly data)
-  
-  
-  naive.model <- snaive(trainData, h = 8 )
+  # train on data from 2012 to the end of 2015
+  naive.forecast <- snaive(trainingData, h = 16 )
 
-  #Forecast for two more years (2016 and 2017)
-  naive.forecast <-forecast(naive.model,h=8)      ### h is the length of the forecast, in this case 2 years = 4 * 2
+  #Forecast for two more years (2016 and 2017) to compare to our test data
+  #naive.forecast <-forecast(naive.model,h=8)      ### h is the length of the forecast, in this case 2 years = 4 * 2
 
-  plot(naive.forecast, plot.conf=FALSE)
-  lines(testData, col="red")
-  legend("topleft",lty=1,bty = "n",col=c("red","blue"),c("testData","Seasonal Naive"))
+  # Forecast plot
+  plotTitle <- paste(neighborhood, ": Naive Model Forecast")
+  options(scipen=999)
+  plot(naive.forecast, main=plotTitle, ylab = "Median House Price", xlab = "Year") # plots both the train data, test data and prediction
+  lines(testData, col="red") # color the test data to tell it from the train data
+  legend("topleft",lty=1,bty = "n",col=c("black", "red","blue"),c("Train Data", "Test Data","Seasonal Naive"))
 
-  plot(ser, main="Quarterly data", ylab="", xlab="Years", col = "red")  
+  #Quarterly plot with test data
+  #plot(testData, main="Quarterly data", ylab="", xlab="Years", col = "red")  
+  #lines(trainData, col="black")
+  #lines(naive.forecast$mean, col="blue", lwd=3)
+  #legend("topleft",lty=1,bty = "n",col=c("red","blue"),c("Test Data","Seasonal Naive"))
 
-  lines(naive.forecast$mean, col="blue", lwd=3)
-
+  # Plot Accuracy
   accuracy(naive.forecast,testData)
-  tsdisplay(residuals(naive.model))
+  tsdisplay(residuals(naive.model), main = paste(plotTitle, " Residuals"))
   
   #fit.ets <- ets(trainData)
   
@@ -61,11 +64,11 @@ for (neighborhood in neighborhoods.array){
   
   #plot(forecast(fit.ets,h=8))
   
-  plot(testData)
+  #plot(testData)
   
   #lines(fr.ets$mean, col="red", lwd=5)
-  lines(naive.forecast$mean, col="green")
-  legend("topleft",lty=1,cex=1,y.intersp=0.6,bty = "n",col=c("black", "green"),c("data","Naive"))
+  #lines(naive.forecast$mean, col="green")
+  #legend("topleft",lty=1,cex=1,y.intersp=0.6,bty = "n",col=c("black", "green"),c("data","Naive"))
   
   #accuracy(fr.ets,testData)
   #accuracy(arimaMod.Fr,testData)
