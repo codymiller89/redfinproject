@@ -149,16 +149,13 @@ for (neighborhood in neighborhoods.array){
   
 
   # Forecast plot for Combined models ---------
-  print("Combined models plotting")
   plotTitle <- paste(neighborhood, ": TS Models Comparison")
   options(scipen=999)
-  print("plot combined")
   # plots both the train data, test data and both predictions
-  plot(hwinters.forecast$mean, main=plotTitle, ylab = "Median House Price", xlab = "Year", lty="dashed") 
+  plot(oneNeighborhood.timeseries, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
+  lines(hwinters.forecast$mean,col="blue", lty="dashed")
   lines(snaive.forecast$mean, col="green", lty="dashed")
   lines(testData, col="red") # color the test data to tell it from the train data
-  lines(trainingData, col="black") # color the train data
-  print("legend")
   legend("topleft",lty=1,bty = "n",col=c("black", "red","blue", "green"),c("Train Data", "Test Data","Holt Winters", "Seasonal Naive"))
 
   
