@@ -16,6 +16,7 @@ suppressWarnings(suppressMessages(library(forecast)))
 
 ```{r child = 'Redfin-Report-Beginning.Rmd'}
 ```
+
 ```{r load-filter-data}
 # load all redfin data into the data frame
 Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
