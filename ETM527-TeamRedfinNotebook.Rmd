@@ -148,18 +148,18 @@ for (neighborhood in neighborhoods.array){
   # Compare Accuracy --------------------------------------------------------
   #print("Accuracy for Seasonal and Holt Winters")
   # Seasonal Naive
-  print("Seasonal Naive Accuracy for ", neighborhood)
-  summary(snaive.accuracy)
+  print(paste("Seasonal Naive Accuracy for ", neighborhood))
+  print(snaive.accuracy)
   
   # Holt Winters
-  print("Holt Winters Accuracy for ", neighborhood)
-  hwinters.accuracy
+  print(paste("Holt Winters Accuracy for ", neighborhood))
+  print(hwinters.accuracy)
   
   combined.accuracy <-rbind(snaive.accuracy, hwinters.accuracy)
   #plot(snaive.accuracy)
 
   # Forecast plot for Combined models ---------
-  plotTitle <- paste(neighborhood, ": TS Training Model Analysis Comparison")
+  plotTitle <- paste(neighborhood, ": TS Training Model Comparison")
   options(scipen=999)
   # plots both the train data, test data and both predictions
   plot(oneNeighborhood.timeseries, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
@@ -170,11 +170,11 @@ for (neighborhood in neighborhoods.array){
 
   # This needs work  ********************
   # Forecast plot for Combined models ---------
-  plotTitle <- paste(neighborhood, ": TS Full Neighborhood Models Analysis Comparison")
+  plotTitle <- paste(neighborhood, ": Full TS Models Comparison")
   options(scipen=999)
   # plots both the train data, test data and both predictions
-  plot(hwinters.full.forecast$mean, main=plotTitle, ylab = "Median House Price", xlab = "Year", xlim=c(2012, 2020)) # change the x axis on this
-  lines(oneNeighborhood.timeseries,col="blue", lty="dashed")
+  plot(oneNeighborhood.timeseries, main=plotTitle, ylab = "Median House Price", xlab = "Year", xlim=c(2012, 2020)) # change the x axis on this
+  lines(hwinters.full.forecast$mean,col="blue", lty="dashed")
   lines(snaive.full.forecast$mean, col="green", lty="dashed")
   lines(testData, col="red") # color the test data to tell it from the train data
   legend("topleft",lty=1,bty = "n",col=c("black", "red","blue", "green"),c("Train Data", "Test Data","Holt Winters", "Seasonal Naive"))
