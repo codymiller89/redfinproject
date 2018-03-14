@@ -1,15 +1,15 @@
 ---
 title: "Portland Housing Price Prediction by Neighborhood"
 output:
-  html_document: default
+  pdf_document: default
   html_notebook: default
+  html_document: default
 Author: 'Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan Hoo-fatt,
   Jerrod Thomas'
 ---
 ```{r}
 #Load library and suppress warnings
 suppressWarnings(suppressMessages(library(dplyr)))
-#library(dplyr)
 suppressWarnings(suppressMessages(library(fpp)))
 suppressWarnings(suppressMessages(library(forecast)))
 ```
@@ -109,6 +109,7 @@ for (neighborhood in neighborhoods.array){
   
   # train on data from 2012 to the end of 2015, Forecast for four more years (2016 through 2019)
   snaive.forecast <- snaive(trainingData, h = 16 )
+  snaive.full.forecast <- snaive(oneNeighborhood.timeseries, h = 8)
 
   # Forecast plot for Seasonal Naive ---------
   plotTitle <- paste(neighborhood, ": Naive Model Forecast")
@@ -127,7 +128,8 @@ for (neighborhood in neighborhoods.array){
   
     # Apply Forecasting Method to timeseries - Holt Winters Method
   hwinters.forecast <- forecast(HoltWinters(trainingData), h = 16)
-
+  hwinters.full.forecast <- forecast(HoltWinters(oneNeighborhood.timeseries), h = 8)
+  
   # Forecast plot for Holt Winters ---------
   plotTitle <- paste(neighborhood, ": Holt Winters Model Forecast")
   options(scipen=999)
@@ -138,8 +140,10 @@ for (neighborhood in neighborhoods.array){
 
   # Plot Holt Winters Accuracy ---------
   hwinters.accuracy <- accuracy(hwinters.forecast,testData)
+  
   options(scipen=999)
   tsdisplay(residuals(hwinters.forecast), main = paste(plotTitle, " Residuals"))
+  
 
   # Compare Accuracy --------------------------------------------------------
   print("Accuracy for Seasonal and Holt Winters")
@@ -148,14 +152,27 @@ for (neighborhood in neighborhoods.array){
   # Holt Winters
   hwinters.accuracy
   
+  combined.accuracy <-rbind(snaive.accuracy, hwinters.accuracy)
+  #plot(snaive.accuracy)
 
   # Forecast plot for Combined models ---------
-  plotTitle <- paste(neighborhood, ": TS Models Comparison")
+  plotTitle <- paste(neighborhood, ": TS Training Model Analysis Comparison")
   options(scipen=999)
   # plots both the train data, test data and both predictions
   plot(oneNeighborhood.timeseries, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
   lines(hwinters.forecast$mean,col="blue", lty="dashed")
   lines(snaive.forecast$mean, col="green", lty="dashed")
+  lines(testData, col="red") # color the test data to tell it from the train data
+  legend("topleft",lty=1,bty = "n",col=c("black", "red","blue", "green"),c("Train Data", "Test Data","Holt Winters", "Seasonal Naive"))
+
+  # This needs work to change the x axis to 2012 to 2019. ********************
+  # Forecast plot for Combined models ---------
+  plotTitle <- paste(neighborhood, ": TS Full Neighborhood Models Analysis Comparison")
+  options(scipen=999)
+  # plots both the train data, test data and both predictions
+  plot(hwinters.full.forecast$mean, main=plotTitle, ylab = "Median House Price", xlab = "Year") # change the x axis on this
+  lines(oneNeighborhood.timeseries,col="blue", lty="dashed")
+  lines(snaive.full.forecast$mean, col="green", lty="dashed")
   lines(testData, col="red") # color the test data to tell it from the train data
   legend("topleft",lty=1,bty = "n",col=c("black", "red","blue", "green"),c("Train Data", "Test Data","Holt Winters", "Seasonal Naive"))
 
