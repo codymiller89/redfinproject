@@ -1,0 +1,94 @@
+---
+title: "Portland Housing Price Prediction by Neighborhood"
+output:
+  html_document: default
+  html_notebook: default
+Author: 'Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan Hoo-fatt,
+  Jerrod Thomas'
+---
+```{r}
+#Load library and suppress warnings
+suppressWarnings(suppressMessages(library(dplyr)))
+#library(dplyr)
+library(fpp)
+library(forecast)
+```
+
+```{r child = 'Redfin-Report-Beginning.Rmd'}
+```
+```{r load-filter-data}
+# load all redfin data into the data frame
+Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
+
+#Select and summarize only the home variables
+selected.var <-c(2, 6, 9, 24, 27, 30, 39)
+Home_data.df = Oregon.df[, selected.var]
+print("Relevent Housing variables summary")
+summary(Home_data.df)
+
+#Select and summarize only the time variables 
+selected.var <-c(33, 34, 35)
+Time_data.df = Oregon.df[, selected.var]
+print("Relevent Time variables summary")
+summary(Time_data.df)
+
+#Select and summarize only the time variables 
+selected.var <-c(40, 41, 45)
+Time_data.df = Oregon.df[, selected.var]
+print("Relavent Location variables summary")
+summary(Time_data.df)
+
+# filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about
+neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
+
+# load the training data list of unique neighborhoods into an array for iteration
+ neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
+
+```
+
+```{r}
+
+# filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about
+neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
+
+# load the training data list of unique neighborhoods into an array for iteration
+ neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
+
+##Neighborhood Time Series Graphs
+```
+
+```{r}
+# Create a storage array for our results
+neighborhoodsSummary.array <- array()
+
+#We want to store: neighborhood name, timeseries
+neighborhoodsSummary.array <- c("")
+```
+
+```{r child = 'Redfin-Report-ForLoop.Rmd'}
+
+
+```
+
+
+```{r child = 'Redfin-Report-PracticePlotting.Rmd'}
+
+
+
+```
+
+```{r child = 'Redfin-Report-Naive.Rmd'}
+
+```
+```{r child = 'Redfin-Report-Seasonal-Naive.Rmd'}
+
+```
+
+```{r child = 'Redfin-Report-Drift.Rmd'}
+
+```
+
+```{r child = 'Redfin-Report-HoltWinters.Rmd'}
+
+```
+

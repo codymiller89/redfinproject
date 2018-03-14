@@ -1,0 +1,28 @@
+```{r practice-plotting}
+
+
+
+# This section only applies to 1 neighboorhood - ALL neighboorhoods are below
+# Should probally be deprecated, once we submit, this section is for practice
+
+# Load required library
+library(forecast)
+
+# Naive Approach
+# H = Number of periods for forecasting
+plot(naive(oneNeighborhood.timeseries, h = 8))
+plot(naive(oneNeighborhood.timeseries, h = 4))
+
+# Seasonal Naive Method 
+plot(snaive(oneNeighborhood.timeseries, h = 8))
+plot(snaive(oneNeighborhood.timeseries, h = 4))
+
+# Drift Method Method 
+plot(rwf(oneNeighborhood.timeseries, h = 8, drift = T))
+plot(rwf(oneNeighborhood.timeseries, h = 4, drift = T))
+
+# Holt Winters Method 
+plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 8))
+plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 4))
+
+```
