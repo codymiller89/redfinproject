@@ -9,6 +9,11 @@ Author: 'Team Redfin: Wendy Lally, Cody Miller, Andrew Perigault Monte, Stephan 
 ---
 ```{r child = 'Redfin-Report-Beginning.Rmd'}
 ```
+## Appendix A: Data Analysis of Neighborhoods
+
+The following is the data analysis: 
+
+
 
 Load all of the libraries needed for forecasting.
 ```{r}
@@ -18,11 +23,15 @@ suppressWarnings(suppressMessages(library(fpp)))
 suppressWarnings(suppressMessages(library(forecast)))
 ```
 
-Load all of the redfin data into the data frame. Print out some variables in the dataset. We will only be using median price in the timeseries, but this is interesting data that was analyzed prior to deciding on the final solution. 
+Load all of the redfin data into the data frame.  We will only be using median price in the timeseries, but this is interesting data that was analyzed prior to deciding on the final solution. 
 ```{r load-filter-data}
 # load all redfin data into the data frame
 Oregon.df <- read.csv("Redfin Data Portland_ All Residential_filtered.csv")
 
+
+```
+Print out some variables in the dataset. We will only be using median price in the timeseries, but this is interesting data that was analyzed prior to deciding on the final solution. 
+```{r}
 #Select and summarize only the home variables
 selected.var <-c(2, 6, 9, 24, 27, 30, 39)
 Home_data.df = Oregon.df[, selected.var]
@@ -64,30 +73,28 @@ neighborhoodsSummary.array <- array()
 neighborhoodsSummary.array <- c("")
 ```
 
-# Appendix: Neighborhood Analysis
-
-For each neighborhood we will:  
-  - pull the relevant observations and create a timeseries. 
-  - filter out the non-January,April, July and October records as each of our observations is for three months and we want to do seasonal analysis
-  - select only the median price colum
-  - load that dataframe into a OneNeighborhood timeseries
-  - Create the training and validation sets based on year
-  - Run seasonal naive forecasting on the training set. 
-  - Compare the snaive forecast to the test set
-  - Run seasonal naive forecasting on the entire timeseries (not just training)
-  - Plot holt winters timeseries and accuracy
-  - Run holt winters forecasting on the training set. 
-  - Compare the holt winters forecast to the test set
-  - Run holt winters forecasting on the entire timeseries (not just training)
-  - Plot holt winters timeseries and accuracy
-  - Plot the training set, test set, and both of our forecasts
+### Neighborhood Analysis
+* For each neighborhood we will:
+    + pull the relevant observations and create a timeseries. 
+    + filter out the non-January,April, July and October records as each of our observations is for three months and we want to do seasonal analysis
+    + select only the median price colum
+    + load that dataframe into a OneNeighborhood timeseries
+    + Create the training and validation sets based on year
+    + Run seasonal naive forecasting on the training set. 
+    + Compare the snaive forecast to the test set
+    + Run seasonal naive forecasting on the entire timeseries (not just training)
+    + Plot holt winters timeseries and accuracy
+    + Run holt winters forecasting on the training set. 
+    + Compare the holt winters forecast to the test set
+    + Run holt winters forecasting on the entire timeseries (not just training)
+    + Plot holt winters timeseries and accuracy
+    + Plot the training set, test set, and both of our forecasts
 
 ```{r}
 # For loop
 #loop through all the neighboorhoods and for each create a timeseries and print the plot
 for (neighborhood in neighborhoods.array){
-  
-    knitr::normal_print(neighborhood)
+
     # use if just want to look at one neighborhood: for (neighborhood in c("Portland, OR - Rose City Park")){
     #select a neighborhood into a dataframe
     oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]

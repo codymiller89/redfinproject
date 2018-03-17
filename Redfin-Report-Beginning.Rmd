@@ -19,16 +19,15 @@ As part of our data cleaning, we realized that the dataset periods offered were 
 With the project selection, we are limited to time series-based modeling. We initially used the linear trend time series modeling technique and compared this to the naive approach. We are also considering caomparing the accuracy of these two models to a model involving trend and seasonality if there is time.
 
 ##Next Steps
-* Run time series model on training and validation sets
-* Try various time series models and compare accuracy
+* Run time series model on training and validation sets - done
+* Try various time series models and compare accuracy - done
     + Trend and seasonality
     + Linear, and polynomial 
     + Naive
-* Compare accuracy between these models
-* Create comparison array to evaluate neighborhood predictions
-* Continue building report and narrative
-* Investigate possibility of visualizing with a mapping tool
-* Beautify graphs/visualizations
+* Compare accuracy between these models - need write up
+* Create comparison array to evaluate neighborhood predictions - need to do
+* Investigate possibility of visualizing with a mapping tool - need to do
+* Beautify graphs/visualizations - done
 
 ##References
 [Redfin Data Center: Downloadable Housing Market Data From Redfin](https://www.redfin.com/blog/data-center)

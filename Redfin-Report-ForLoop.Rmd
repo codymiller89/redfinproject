@@ -24,8 +24,11 @@ for (neighborhood in neighborhoods.array){
   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
   
   # divide the timeseries that was created into two parts
-  trainingData = window(oneNeighborhood.timeseries, start=1, end=16) ### Training set (4 years, quarterly data)
-  testData = window(oneNeighborhood.timeseries, start=17)  ### Test set(2 years, quarterly data)
+  # Training Set (2012 to 2015)-( 4 years quarterly)
+  trainingData = window(oneNeighborhood.timeseries, start=1, end=16) 
+  
+  # Test set(2 years, quarterly data)
+  testData = window(oneNeighborhood.timeseries, start=17)  
   
   
   # Generic plot of timeseries without any modeling ---------------------
