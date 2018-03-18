@@ -1,14 +1,33 @@
 
+##Executive Summary
+The City of Portland has experienced exceptional growth in the last 10 years [1]. This significant growth, along with the urban growth boundary [2] has led to average home prices in the city growing to all time highs and much faster than the national average.
+Our study looks to predict the future median home prices over the next coming years to see how this trend will impact affordability within the city and region. 
 
-##Introduction
-For our team project we chose to do an analysis of real estate pricing information for Portland Oregon. Our interest is to predict how quickly the median housing price will climb within the city. We will break that into geographic regions, and try to identify any major trends from this prediction. 
-Exceptional growth in urban housing prices has led to gentrification to many urban towns in recent days. With Portland being one of the most attrative cities to move to, housing prices, new development, and decades of strong urban renewal projects have culminated in housing prices soaring faster than most other American cities. 
+This analysis defines affordability for the typical Portland household, then analyzes the each neighborhood's median sales price from 2012 through 2017. Evaluating the data shows significant variation in our dataset but three general trends are identified: the "flat but bouncy," most often correlated to high-priced neighborhoods; the "meeting price elasticity" found in the mid-market priced areas; and the "up-and-coming," appearing farther out from the city center. We then project median sales prices forward for <#> years and compare where affordability maps.
+
+This information is valuable for several government and business purposes. Local and state legislators can identify andcontrol for, or assist those affected by radical growth in housing prices and the impacts of gentriciation. For business and construction, these trends can identify areas or neighborhoods that look to be show a balance between good value and likely ongoing growth in final sales prices. This would likely be housing developers or your single family home "flippers."
+
+Ultimately, this data provides a simplified view into the complexities of real estate in one of the nation's hottest markets. It projects that trends remain hot and identifies that, over time, housing prices have continued to drive average home buyers further from the city center likley driving current residents in these highly sought after areas out.
+
+***
 
 ##Business problem
-In order to better understand the Portland housing market, we will be analyzing the trends in housing prices and attempt to predict the future prices of housing by neighborhood. This will provide us an indication of affordability and allow us to predict where the next bursts in housing price inflation might occur. If you are in real estate, then you should invest in these areas. If you are a city planner, you should focus your anti-gentrification and housing affordability efforts in these neighborhoods to reduce displacement in the local populations.
+This is an analysis of real estate pricing information for Portland, Oregon. Our interest is to predict how quickly the median housing price will climb within the city and compare that against the average family income. While identification of the overall trend in Portland is interesting, our group has broken the city down by neighborhood in order to classify and identify variations and trends across the region. 
 
-##Relevant data driven, analytical work in this area
-The majority of our work has focused on the isolation of approriate data from our initial dataset and preparation for time series analysis. There are a number of research papers evaluating this particular topic of affordability in metropolitan areas and some specifically in Portland. [Oregon Live is hosting an interactive map on this topic](https://projects.oregonlive.com/maps/gentrification/), showcasing similar results to those that we are seeking to understand: what neighborhoods are under pressure from gentrification and which are likely to be next. 
+If you are in real estate, then you should invest in areas with high growth in median sales prices predicted. If you are a city planner, you should focus your anti-gentrification policies and housing affordability efforts in these neighborhoods to reduce displacement in the resident populations.
+
+***
+
+##Related Work
+The majority of our work has focused on the isolation of approriate data from our initial dataset and preparation for time series analysis. To determine the relevance of this undertaking, we did a survey of the topic and found several interesting correlaries. [Oregon Live is hosting an interactive map on this topic](https://projects.oregonlive.com/maps/gentrification/), showcasing a similar effort: to determine what neighborhoods are under pressure from gentrification and which are likely to be next. [3] "Map of Gentrification in Portland"[This study was generated by city planners from Portland's Bureau of Planning and Sustainability](https://www.portlandoregon.gov/bps/article/454027).
+![Map of Portland neighborhoods showing various stages of gentrification](./oregonian_portlandgentrification.png "Portland Gentrification Map")
+Zillow has a wealth of information including [their own proprietary "Zestimate"](https://www.zillow.com/zestimate/#acc) of a single properties estimate market value. As we explored their blogs and sites, we also found have historical information for the median home prices for [all of Portland with a forecast](https://www.zillow.com/portland-or/home-values/) that only goes out one year. They provide this information and a "market temperature" gauge to indicate if it's a buyer or seller's market.
+![Zillow Portland median home price history and 1-year forecast](./zillow_portlandforecast.png)
+Those two examples were helpful as each was trying to show an element of our project, the mapping of data to location and the forecasting of prices. Another report by Portland Monthly magazine examined Portland's neighborhoods median change in price over one year, breaking the increases into blocks of prices increases. This visual shows that some popular inner-city neighborhoods continue to show 20% or higher increases in median sale price, while the majority of the outer city area, particularly the eastside have growth rates between 10-19%. This reflected our expectations and was another data point to make comparisons.
+
+![One year percentage change in median home prices for Portland](./portlandmonthly_medianpricechange.png)
+
+***
 
 ##Data Source, Data Exploration, Descriptive Statistics, Variable Selection
 Our data was sourced from the Redfin Data Center. The dataset was quite large and we initially reviewed the 47 variables for validity with our analysis in mind. We ultimately limited this to 13 variables, seven related to cost and availability which could be used for our preditinos. Another three variables related to the time series, and three related to the regions were selected to allow us to do appropriate filtering of our dataset from a nationwide, nearly 1.5 gigabyte CSV into a more manageable, Oregon-only dataset. 
