@@ -34,7 +34,7 @@ for (neighborhood in neighborhoods.array){
   naive.forecast <- snaive(trainingData, h = 16 )
 
   # Forecast plot
-  plotTitle <- paste(neighborhood, ": Naive Model Forecast")
+  plotTitle <- paste(neighborhood, ": Seasonal Naive Model Forecast")
   options(scipen=999)
   plot(naive.forecast, main=plotTitle, ylab = "Median House Price", xlab = "Year") # plots both the train data, test data and prediction
   lines(testData, col="red") # color the test data to tell it from the train data
