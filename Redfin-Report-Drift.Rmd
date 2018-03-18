@@ -1,3 +1,8 @@
+---
+output:
+  html_document: default
+  pdf_document: default
+---
 ```{r drift-forecast}
 # Drift Method
 # 8 Period Forecast & 4 Period Forecast
@@ -28,8 +33,11 @@ for (neighborhood in neighborhoods.array){
   
   # Apply Forecasting Method to timeseries - Drift Method
   # 8 Periods
-  plot(rwf(oneNeighborhood.timeseries, h = 8, drift = T))
-  
+  plotTitle <- paste(neighborhood, ": Drift Model Forecast")
+  options(scipen=999)
+
+  # plots both the train data, test data and both predictions
+  plot(oneNeighborhood.timeseries, main=plotTitle, ylab = "Median House Price", xlab = "Year")
   # 4 Periods
 #  plot(rwf(oneNeighborhood.timeseries, h = 4, drift = T))
   

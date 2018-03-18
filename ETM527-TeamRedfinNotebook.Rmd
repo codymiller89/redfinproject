@@ -14,8 +14,8 @@ suppressWarnings(suppressMessages(library(fpp)))
 suppressWarnings(suppressMessages(library(forecast)))
 ```
 
-```{r child = 'Redfin-Report-Beginning.Rmd'}
-```
+#```{r child = 'Redfin-Report-Beginning.Rmd'}
+#```
 
 ```{r load-filter-data}
 # load all redfin data into the data frame
@@ -189,6 +189,7 @@ for (neighborhood in neighborhoods.array){
 
 #```{r child = 'Redfin-Report-Naive.Rmd'}
 #```
+
 #```{r child = 'Redfin-Report-Seasonal-Naive.Rmd'}
 #```
 

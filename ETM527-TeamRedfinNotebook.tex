@@ -1,0 +1,2806 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Portland Housing Price Prediction by Neighborhood},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Portland Housing Price Prediction by Neighborhood}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{}
+  \preauthor{}\postauthor{}
+  \date{}
+  \predate{}\postdate{}
+
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Load library and suppress warnings}
+\KeywordTok{suppressWarnings}\NormalTok{(}\KeywordTok{suppressMessages}\NormalTok{(}\KeywordTok{library}\NormalTok{(dplyr)))}
+\KeywordTok{suppressWarnings}\NormalTok{(}\KeywordTok{suppressMessages}\NormalTok{(}\KeywordTok{library}\NormalTok{(fpp)))}
+\KeywordTok{suppressWarnings}\NormalTok{(}\KeywordTok{suppressMessages}\NormalTok{(}\KeywordTok{library}\NormalTok{(forecast)))}
+\end{Highlighting}
+\end{Shaded}
+
+\section{\texorpdfstring{\texttt{\{r\ child\ =\ \textquotesingle{}Redfin-Report-Beginning.Rmd\textquotesingle{}\}\ \#}}{\{r child = 'Redfin-Report-Beginning.Rmd'\} \#}}\label{r-child-redfin-report-beginning.rmd}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# load all redfin data into the data frame}
+\NormalTok{Oregon.df <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"Redfin Data Portland_ All Residential_filtered.csv"}\NormalTok{)}
+
+\CommentTok{#Select and summarize only the home variables}
+\NormalTok{selected.var <-}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{24}\NormalTok{, }\DecValTok{27}\NormalTok{, }\DecValTok{30}\NormalTok{, }\DecValTok{39}\NormalTok{)}
+\NormalTok{Home_data.df =}\StringTok{ }\NormalTok{Oregon.df[, selected.var]}
+\KeywordTok{print}\NormalTok{(}\StringTok{"Relevent Housing variables summary"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Relevent Housing variables summary"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(Home_data.df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Avg.Sale.To.List   Homes.Sold      Inventory     Median.Sale.Price
+##  Min.   :0.7710   Min.   :  1.0   Min.   :  1.0   Min.   :  98000  
+##  1st Qu.:0.9857   1st Qu.: 14.0   1st Qu.:  8.0   1st Qu.: 267000  
+##  Median :0.9985   Median : 25.0   Median : 14.0   Median : 356500  
+##  Mean   :1.0010   Mean   : 53.8   Mean   : 32.7   Mean   : 380111  
+##  3rd Qu.:1.0142   3rd Qu.: 47.0   3rd Qu.: 28.0   3rd Qu.: 456438  
+##  Max.   :1.2165   Max.   :729.0   Max.   :537.0   Max.   :2060000  
+##                                   NA's   :20                       
+##  Months.Of.Supply  New.Listings            Property.Type 
+##  Mode:logical     Min.   :  1.00   All Residential:6836  
+##  NA's:6836        1st Qu.: 14.00                         
+##                   Median : 26.00                         
+##                   Mean   : 55.33                         
+##                   3rd Qu.: 48.00                         
+##                   Max.   :855.00                         
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Select and summarize only the time variables }
+\NormalTok{selected.var <-}\KeywordTok{c}\NormalTok{(}\DecValTok{33}\NormalTok{, }\DecValTok{34}\NormalTok{, }\DecValTok{35}\NormalTok{)}
+\NormalTok{Time_data.df =}\StringTok{ }\NormalTok{Oregon.df[, selected.var]}
+\KeywordTok{print}\NormalTok{(}\StringTok{"Relevent Time variables summary"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Relevent Time variables summary"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(Time_data.df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Period.Begin  Period.Duration   Period.End  
+##  1/1/13 :  95   Min.   :90      1/31/12:  95  
+##  1/1/14 :  95   1st Qu.:90      1/31/13:  95  
+##  1/1/15 :  95   Median :90      1/31/14:  95  
+##  1/1/16 :  95   Mean   :90      1/31/15:  95  
+##  1/1/17 :  95   3rd Qu.:90      1/31/16:  95  
+##  10/1/12:  95   Max.   :90      1/31/17:  95  
+##  (Other):6266                   (Other):6266
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#Select and summarize only the time variables }
+\NormalTok{selected.var <-}\KeywordTok{c}\NormalTok{(}\DecValTok{40}\NormalTok{, }\DecValTok{41}\NormalTok{, }\DecValTok{45}\NormalTok{)}
+\NormalTok{Time_data.df =}\StringTok{ }\NormalTok{Oregon.df[, selected.var]}
+\KeywordTok{print}\NormalTok{(}\StringTok{"Relavent Location variables summary"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Relavent Location variables summary"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(Time_data.df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                               Region           Region.Type      State     
+##  Portland, OR - Alameda          :  72   neighborhood:6836   Oregon:6836  
+##  Portland, OR - Arbor Lodge      :  72                                    
+##  Portland, OR - Argay            :  72                                    
+##  Portland, OR - Arnold Creek     :  72                                    
+##  Portland, OR - Ashcreek         :  72                                    
+##  Portland, OR - Beaumont-Wilshire:  72                                    
+##  (Other)                         :6404
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about}
+\NormalTok{neighborhoods.df <-}\StringTok{ }\NormalTok{Oregon.df[Oregon.df}\OperatorTok{$}\NormalTok{Region.Type }\OperatorTok{==}\StringTok{ "neighborhood"}\NormalTok{,]}
+
+\CommentTok{# load the training data list of unique neighborhoods into an array for iteration}
+\NormalTok{ neighborhoods.array <-}\StringTok{ }\KeywordTok{unique}\NormalTok{(neighborhoods.df}\OperatorTok{$}\NormalTok{Region, }\DataTypeTok{incomparables =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about}
+\NormalTok{neighborhoods.df <-}\StringTok{ }\NormalTok{Oregon.df[Oregon.df}\OperatorTok{$}\NormalTok{Region.Type }\OperatorTok{==}\StringTok{ "neighborhood"}\NormalTok{,]}
+
+\CommentTok{# load the training data list of unique neighborhoods into an array for iteration}
+\NormalTok{ neighborhoods.array <-}\StringTok{ }\KeywordTok{unique}\NormalTok{(neighborhoods.df}\OperatorTok{$}\NormalTok{Region, }\DataTypeTok{incomparables =} \OtherTok{FALSE}\NormalTok{)}
+
+\NormalTok{##Neighborhood Time Series Graphs}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Create a storage array for our results}
+\NormalTok{neighborhoodsSummary.array <-}\StringTok{ }\KeywordTok{array}\NormalTok{()}
+
+\CommentTok{#We want to store: neighborhood name, timeseries}
+\NormalTok{neighborhoodsSummary.array <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\section{\texorpdfstring{\texttt{\{r\ child\ =\ \textquotesingle{}Redfin-Report-ForLoop.Rmd\textquotesingle{}\}\ \#}}{\{r child = 'Redfin-Report-ForLoop.Rmd'\} \#}}\label{r-child-redfin-report-forloop.rmd}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# For loop}
+\CommentTok{#loop through all the neighboorhoods and for each create a timeseries and print the plot}
+\ControlFlowTok{for}\NormalTok{ (neighborhood }\ControlFlowTok{in}\NormalTok{ neighborhoods.array)\{}
+\CommentTok{# use if just want to look at one neighborhood: for (neighborhood in c("Portland, OR - Rose City Park"))\{}
+  \CommentTok{#select a neighborhood into a dataframe}
+\NormalTok{  oneNeighborhood.df <-}\StringTok{ }\NormalTok{neighborhoods.df[Oregon.df}\OperatorTok{$}\NormalTok{Region }\OperatorTok{==}\StringTok{ }\NormalTok{neighborhood,]}
+  
+  \CommentTok{#filter out the observations for months that aren't January (1), April (4), July (7), October (10). }
+  \CommentTok{#Note that had to invert, so selected ones that did not have these patterns matched.}
+\NormalTok{  oneNeighborhood.df<-oneNeighborhood.df[}\KeywordTok{grep}\NormalTok{(}\StringTok{"2/|3/|5/|6/|8/|9/|11/|12/"}\NormalTok{, oneNeighborhood.df}\OperatorTok{$}\NormalTok{Period.Begin, }\DataTypeTok{invert =} \OtherTok{TRUE}\NormalTok{),]}
+  \CommentTok{# somehow they are out of order, now to sort the period.begin}
+\NormalTok{  oneNeighborhood.df <-}\StringTok{ }\NormalTok{oneNeighborhood.df[}\KeywordTok{order}\NormalTok{(}\KeywordTok{as.Date}\NormalTok{(oneNeighborhood.df}\OperatorTok{$}\NormalTok{Period.Begin, }\DataTypeTok{format=}\StringTok{"%m/%d/%Y"}\NormalTok{)),]}
+\NormalTok{  dat1 <-}\StringTok{ }\NormalTok{oneNeighborhood.df }\CommentTok{# save for debugging prior to removing columns}
+  
+  \CommentTok{#log how many rows each neighborhood has available}
+  \CommentTok{#cat(neighborhood, " has ", nrow(oneNeighborhood.df), " rows. \textbackslash{}n")}
+  
+  \CommentTok{# select the median price column for the timeseries}
+\NormalTok{  oneNeighborhood.df <-}\StringTok{ }\NormalTok{oneNeighborhood.df[}\KeywordTok{c}\NormalTok{(}\DecValTok{18}\NormalTok{)]}
+  
+  \CommentTok{# create the timeseries}
+\NormalTok{  oneNeighborhood.timeseries <-}\StringTok{ }\KeywordTok{ts}\NormalTok{(oneNeighborhood.df, }\DataTypeTok{frequency=}\DecValTok{4}\NormalTok{, }\DataTypeTok{start=}\KeywordTok{c}\NormalTok{(}\DecValTok{2012}\NormalTok{,}\DecValTok{1}\NormalTok{))}
+  
+  \CommentTok{#str(oneNeighborhood.timeseries)}
+  
+  \CommentTok{# divide the timeseries that was created into two parts}
+\NormalTok{  trainingData =}\StringTok{ }\KeywordTok{window}\NormalTok{(oneNeighborhood.timeseries, }\DataTypeTok{start=}\KeywordTok{c}\NormalTok{(}\DecValTok{2012}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{end=}\KeywordTok{c}\NormalTok{(}\DecValTok{2015}\NormalTok{,}\DecValTok{4}\NormalTok{)) ### Training set (4 years, quarterly data)}
+\NormalTok{  testData =}\StringTok{ }\KeywordTok{window}\NormalTok{(oneNeighborhood.timeseries, }\DataTypeTok{start=}\KeywordTok{c}\NormalTok{(}\DecValTok{2016}\NormalTok{,}\DecValTok{1}\NormalTok{), }\DataTypeTok{end=}\KeywordTok{c}\NormalTok{(}\DecValTok{2017}\NormalTok{,}\DecValTok{4}\NormalTok{), }\DataTypeTok{frequency=}\DecValTok{4}\NormalTok{)  ### Test set    (2 years, quarterly data)}
+  
+  \CommentTok{# Generic plot of timeseries without any modeling ---------------------}
+  \CommentTok{# plot and set title to the appropriate heading}
+  \KeywordTok{options}\NormalTok{(}\DataTypeTok{scipen=}\DecValTok{999}\NormalTok{)}
+  \KeywordTok{plot}\NormalTok{(oneNeighborhood.timeseries, }\DataTypeTok{main=}\NormalTok{neighborhood)}
+  
+  
+  \CommentTok{# Seasonal Naive Plots --------------------------------------------------}
+  
+  \CommentTok{# train on data from 2012 to the end of 2015, Forecast for four more years (2016 through 2019)}
+\NormalTok{  snaive.forecast <-}\StringTok{ }\KeywordTok{snaive}\NormalTok{(trainingData, }\DataTypeTok{h =} \DecValTok{16}\NormalTok{ )}
+\NormalTok{  snaive.full.forecast <-}\StringTok{ }\KeywordTok{snaive}\NormalTok{(oneNeighborhood.timeseries, }\DataTypeTok{h =} \DecValTok{8}\NormalTok{)}
+
+  \CommentTok{# Forecast plot for Seasonal Naive ---------}
+\NormalTok{  plotTitle <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(neighborhood, }\StringTok{": Naive Model Forecast"}\NormalTok{)}
+  \KeywordTok{options}\NormalTok{(}\DataTypeTok{scipen=}\DecValTok{999}\NormalTok{)}
+  \CommentTok{# plots both the train data, test data and prediction}
+  \KeywordTok{plot}\NormalTok{(snaive.forecast, }\DataTypeTok{main=}\NormalTok{plotTitle, }\DataTypeTok{ylab =} \StringTok{"Median House Price"}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Year"}\NormalTok{) }
+  \KeywordTok{lines}\NormalTok{(testData, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{) }\CommentTok{# color the test data to tell it from the train data}
+  \KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{1}\NormalTok{,}\DataTypeTok{bty =} \StringTok{"n"}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"red"}\NormalTok{,}\StringTok{"blue"}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\StringTok{"Train Data"}\NormalTok{, }\StringTok{"Test Data"}\NormalTok{,}\StringTok{"Seasonal Naive"}\NormalTok{))}
+
+  \CommentTok{# Plot Seasonal Naive Accuracy ---------}
+\NormalTok{  snaive.accuracy <-}\StringTok{ }\KeywordTok{accuracy}\NormalTok{(snaive.forecast,testData)}
+  \KeywordTok{options}\NormalTok{(}\DataTypeTok{scipen=}\DecValTok{999}\NormalTok{)}
+  \KeywordTok{tsdisplay}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(snaive.forecast), }\DataTypeTok{main =} \KeywordTok{paste}\NormalTok{(plotTitle, }\StringTok{" Residuals"}\NormalTok{))}
+  
+  \CommentTok{# Holt Winters Plots -----------------------------------------------------}
+  
+    \CommentTok{# Apply Forecasting Method to timeseries - Holt Winters Method}
+\NormalTok{  hwinters.forecast <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(}\KeywordTok{HoltWinters}\NormalTok{(trainingData), }\DataTypeTok{h =} \DecValTok{16}\NormalTok{)}
+\NormalTok{  hwinters.full.forecast <-}\StringTok{ }\KeywordTok{forecast}\NormalTok{(}\KeywordTok{HoltWinters}\NormalTok{(oneNeighborhood.timeseries), }\DataTypeTok{h =} \DecValTok{8}\NormalTok{)}
+  
+  \CommentTok{# Forecast plot for Holt Winters ---------}
+\NormalTok{  plotTitle <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(neighborhood, }\StringTok{": Holt Winters Model Forecast"}\NormalTok{)}
+  \KeywordTok{options}\NormalTok{(}\DataTypeTok{scipen=}\DecValTok{999}\NormalTok{)}
+  \CommentTok{# plots both the train data, test data and prediction}
+  \KeywordTok{plot}\NormalTok{(hwinters.forecast, }\DataTypeTok{main=}\NormalTok{plotTitle, }\DataTypeTok{ylab =} \StringTok{"Median House Price"}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Year"}\NormalTok{) }
+  \KeywordTok{lines}\NormalTok{(testData, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{) }\CommentTok{# color the test data to tell it from the train data}
+  \KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{1}\NormalTok{,}\DataTypeTok{bty =} \StringTok{"n"}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"red"}\NormalTok{,}\StringTok{"blue"}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\StringTok{"Train Data"}\NormalTok{, }\StringTok{"Test Data"}\NormalTok{,}\StringTok{"Holt Winters"}\NormalTok{))}
+
+  \CommentTok{# Plot Holt Winters Accuracy ---------}
+\NormalTok{  hwinters.accuracy <-}\StringTok{ }\KeywordTok{accuracy}\NormalTok{(hwinters.forecast,testData)}
+  
+  \KeywordTok{options}\NormalTok{(}\DataTypeTok{scipen=}\DecValTok{999}\NormalTok{)}
+  \KeywordTok{tsdisplay}\NormalTok{(}\KeywordTok{residuals}\NormalTok{(hwinters.forecast), }\DataTypeTok{main =} \KeywordTok{paste}\NormalTok{(plotTitle, }\StringTok{" Residuals"}\NormalTok{))}
+  
+
+  \CommentTok{# Compare Accuracy --------------------------------------------------------}
+  \CommentTok{#print("Accuracy for Seasonal and Holt Winters")}
+  \CommentTok{# Seasonal Naive}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"Seasonal Naive Accuracy for "}\NormalTok{, neighborhood))}
+  \KeywordTok{print}\NormalTok{(snaive.accuracy)}
+  
+  \CommentTok{# Holt Winters}
+  \KeywordTok{print}\NormalTok{(}\KeywordTok{paste}\NormalTok{(}\StringTok{"Holt Winters Accuracy for "}\NormalTok{, neighborhood))}
+  \KeywordTok{print}\NormalTok{(hwinters.accuracy)}
+  
+\NormalTok{  combined.accuracy <-}\KeywordTok{rbind}\NormalTok{(snaive.accuracy, hwinters.accuracy)}
+  \CommentTok{#plot(snaive.accuracy)}
+
+  \CommentTok{# Forecast plot for Combined models ---------}
+\NormalTok{  plotTitle <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(neighborhood, }\StringTok{": TS Training Model Comparison"}\NormalTok{)}
+  \KeywordTok{options}\NormalTok{(}\DataTypeTok{scipen=}\DecValTok{999}\NormalTok{)}
+  \CommentTok{# plots both the train data, test data and both predictions}
+  \KeywordTok{plot}\NormalTok{(oneNeighborhood.timeseries, }\DataTypeTok{main=}\NormalTok{plotTitle, }\DataTypeTok{ylab =} \StringTok{"Median House Price"}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Year"}\NormalTok{) }
+  \KeywordTok{lines}\NormalTok{(hwinters.forecast}\OperatorTok{$}\NormalTok{mean,}\DataTypeTok{col=}\StringTok{"blue"}\NormalTok{, }\DataTypeTok{lty=}\StringTok{"dashed"}\NormalTok{)}
+  \KeywordTok{lines}\NormalTok{(snaive.forecast}\OperatorTok{$}\NormalTok{mean, }\DataTypeTok{col=}\StringTok{"green"}\NormalTok{, }\DataTypeTok{lty=}\StringTok{"dashed"}\NormalTok{)}
+  \KeywordTok{lines}\NormalTok{(testData, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{) }\CommentTok{# color the test data to tell it from the train data}
+  \KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{1}\NormalTok{,}\DataTypeTok{bty =} \StringTok{"n"}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"red"}\NormalTok{,}\StringTok{"blue"}\NormalTok{, }\StringTok{"green"}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\StringTok{"Train Data"}\NormalTok{, }\StringTok{"Test Data"}\NormalTok{,}\StringTok{"Holt Winters"}\NormalTok{, }\StringTok{"Seasonal Naive"}\NormalTok{))}
+
+  \CommentTok{# This needs work  ********************}
+  \CommentTok{# Forecast plot for Combined models ---------}
+\NormalTok{  plotTitle <-}\StringTok{ }\KeywordTok{paste}\NormalTok{(neighborhood, }\StringTok{": Full TS Models Comparison"}\NormalTok{)}
+  \KeywordTok{options}\NormalTok{(}\DataTypeTok{scipen=}\DecValTok{999}\NormalTok{)}
+  \CommentTok{# plots both the train data, test data and both predictions}
+  \KeywordTok{plot}\NormalTok{(oneNeighborhood.timeseries, }\DataTypeTok{main=}\NormalTok{plotTitle, }\DataTypeTok{ylab =} \StringTok{"Median House Price"}\NormalTok{, }\DataTypeTok{xlab =} \StringTok{"Year"}\NormalTok{, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{2012}\NormalTok{, }\DecValTok{2020}\NormalTok{)) }\CommentTok{# change the x axis on this}
+  \KeywordTok{lines}\NormalTok{(hwinters.full.forecast}\OperatorTok{$}\NormalTok{mean,}\DataTypeTok{col=}\StringTok{"blue"}\NormalTok{, }\DataTypeTok{lty=}\StringTok{"dashed"}\NormalTok{)}
+  \KeywordTok{lines}\NormalTok{(snaive.full.forecast}\OperatorTok{$}\NormalTok{mean, }\DataTypeTok{col=}\StringTok{"green"}\NormalTok{, }\DataTypeTok{lty=}\StringTok{"dashed"}\NormalTok{)}
+  \KeywordTok{lines}\NormalTok{(testData, }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{) }\CommentTok{# color the test data to tell it from the train data}
+  \KeywordTok{legend}\NormalTok{(}\StringTok{"topleft"}\NormalTok{,}\DataTypeTok{lty=}\DecValTok{1}\NormalTok{,}\DataTypeTok{bty =} \StringTok{"n"}\NormalTok{,}\DataTypeTok{col=}\KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"red"}\NormalTok{,}\StringTok{"blue"}\NormalTok{, }\StringTok{"green"}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\StringTok{"Train Data"}\NormalTok{, }\StringTok{"Test Data"}\NormalTok{,}\StringTok{"Holt Winters"}\NormalTok{, }\StringTok{"Seasonal Naive"}\NormalTok{))}
+
+  
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-1.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-2.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-3.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-4.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-5.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - University Park"
+##                     ME     RMSE       MAE       MPE     MAPE    MASE
+## Training set  25885.42  42497.5  36427.08  7.008834 10.78227 1.00000
+## Test set     100118.75 114050.3 100118.75 21.016354 21.01635 2.74847
+##                     ACF1 Theil's U
+## Training set -0.01200592        NA
+## Test set     -0.37374805  2.224126
+## [1] "Holt Winters Accuracy for  Portland, OR - University Park"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set -1024.014 31384.93 25972.89 -1.114452  8.03032 0.7130105
+## Test set     56695.957 69796.37 56695.96 11.715301 11.71530 1.5564232
+##                    ACF1 Theil's U
+## Training set -0.0802167        NA
+## Test set     -0.4803334  1.384819
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-6.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-7.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-8.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-9.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-10.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-11.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-12.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Laurelhurst"
+##                    ME      RMSE      MAE       MPE     MAPE     MASE
+## Training set 43054.17  70162.83 60962.50  6.671586 10.18174 1.000000
+## Test set     85868.69 104522.77 85868.69 11.517774 11.51777 1.408549
+##                     ACF1 Theil's U
+## Training set -0.03648456        NA
+## Test set     -0.22043044  2.938658
+## [1] "Holt Winters Accuracy for  Portland, OR - Laurelhurst"
+##                    ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set 19790.64 56864.47 45070.81 2.761935 7.630577 0.7393202
+## Test set     48390.00 75056.32 60122.03 6.437787 8.115415 0.9862133
+##                     ACF1 Theil's U
+## Training set -0.04008784        NA
+## Test set     -0.26258388  2.157108
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-13.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-14.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-15.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-16.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-17.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-18.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-19.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Hillsdale"
+##                    ME     RMSE      MAE      MPE      MAPE      MASE
+## Training set 36016.58 66830.67 50412.42 7.235723 10.886638 1.0000000
+## Test set     33762.75 51151.83 40150.25 5.998290  7.246805 0.7964357
+##                    ACF1 Theil's U
+## Training set 0.18404603        NA
+## Test set     0.05325808 0.7727486
+## [1] "Holt Winters Accuracy for  Portland, OR - Hillsdale"
+##                    ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set 11656.48 40406.97 29364.52 2.1004318 6.508379 0.5824858
+## Test set      4732.51 45620.96 39357.41 0.4714847 7.521282 0.7807087
+##                     ACF1 Theil's U
+## Training set  0.03315418        NA
+## Test set     -0.49251796 0.8385261
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-20.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-21.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-22.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-23.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-24.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-25.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-26.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Reed"
+##                    ME      RMSE      MAE      MPE     MAPE     MASE
+## Training set 45070.83  78903.52 62491.75 10.53557 16.00114 1.000000
+## Test set     89837.50 128719.89 99837.50 15.31361 17.69456 1.597611
+##                     ACF1 Theil's U
+## Training set -0.29490796        NA
+## Test set     -0.01326119 0.9950992
+## [1] "Holt Winters Accuracy for  Portland, OR - Reed"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set -9903.259 48058.84 36594.91 -3.339861 10.16543 0.5855959
+## Test set     -4252.084 79255.13 75504.74 -2.773244 14.79421 1.2082353
+##                    ACF1 Theil's U
+## Training set 0.08760349        NA
+## Test set     0.10709405  0.638909
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-27.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-28.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-29.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-30.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-31.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-32.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-33.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Irvington"
+##                    ME     RMSE      MAE      MPE     MAPE    MASE
+## Training set 56437.71 111688.9 91870.62 7.637594 14.55787 1.00000
+## Test set     45725.00 114129.6 95737.50 5.651526 12.62630 1.04209
+##                    ACF1 Theil's U
+## Training set -0.1769002        NA
+## Test set     -0.1336189  2.031616
+## [1] "Holt Winters Accuracy for  Portland, OR - Irvington"
+##                     ME      RMSE       MAE        MPE     MAPE      MASE
+## Training set -15732.23  99758.42  77847.25  -3.849582 13.34719 0.8473573
+## Test set     -83651.86 131826.88 105131.86 -11.712513 14.46787 1.1443468
+##                    ACF1 Theil's U
+## Training set -0.1717025        NA
+## Test set     -0.1151691  2.197225
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-34.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-35.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-36.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-37.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-38.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-39.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-40.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - South Burlingame"
+##                    ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 31808.33 71094.65 53316.50  7.263912 12.77727 1.000000
+## Test set     65293.69 90212.29 74181.19 12.504530 14.51921 1.391336
+##                    ACF1 Theil's U
+## Training set -0.3222211        NA
+## Test set      0.1309570   1.53081
+## [1] "Holt Winters Accuracy for  Portland, OR - South Burlingame"
+##                      ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set -11424.375 62852.01 51998.79 -2.943764 12.93374 0.9752852
+## Test set      -2971.312 64348.93 53943.69 -1.490572 11.11899 1.0117635
+##                    ACF1 Theil's U
+## Training set -0.4035246        NA
+## Test set      0.1840282  1.067099
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-41.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-42.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-43.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-44.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-45.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-46.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-47.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Sylvan-Highlands"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  68458.54 164371.3 130375.2  8.290529 21.21098 1.0000000
+## Test set     -23287.50 138152.8 103137.5 -3.752850 16.32968 0.7910821
+##                     ACF1 Theil's U
+## Training set  0.02780491        NA
+## Test set     -0.06465968  1.557435
+## [1] "Holt Winters Accuracy for  Portland, OR - Sylvan-Highlands"
+##                      ME     RMSE      MAE        MPE     MAPE     MASE
+## Training set  -12232.07 137935.2 100197.0  -4.854105 17.92967 0.768528
+## Test set     -145708.14 160987.8 145708.1 -22.674836 22.67484 1.117606
+##                      ACF1 Theil's U
+## Training set -0.016032771        NA
+## Test set      0.001861636  1.892503
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-48.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-49.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-50.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-51.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-52.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-53.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-54.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Kenton"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 29039.58 35934.79 31306.25 10.35550 11.28173 1.000000
+## Test set     79200.00 83956.07 79200.00 20.17575 20.17575 2.529846
+##                    ACF1 Theil's U
+## Training set -0.4756741        NA
+## Test set      0.5584082  3.440892
+## [1] "Holt Winters Accuracy for  Portland, OR - Kenton"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  4282.655 18046.33 14739.14 1.439729 5.638234 0.4708050
+## Test set     29288.808 34533.03 29288.81 7.403719 7.403719 0.9355578
+##                    ACF1 Theil's U
+## Training set -0.3562911        NA
+## Test set      0.3959399  1.435154
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-55.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-56.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-57.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-58.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-59.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-60.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-61.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - St. Johns"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 26052.08 28944.74 26052.08 10.78351 10.78351 1.000000
+## Test set     64906.12 70364.30 64906.12 19.06429 19.06429 2.491399
+##                   ACF1 Theil's U
+## Training set 0.2422093        NA
+## Test set     0.3400692  3.568565
+## [1] "Holt Winters Accuracy for  Portland, OR - St. Johns"
+##                      ME     RMSE       MAE       MPE     MAPE      MASE
+## Training set   500.3233 10574.05  8864.883 0.1146364 3.908180 0.3402754
+## Test set     13728.1444 20400.33 17626.432 3.8737207 5.193873 0.6765843
+##                    ACF1 Theil's U
+## Training set 0.09076774        NA
+## Test set     0.30245743  1.073106
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-62.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-63.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-64.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-65.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-66.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-67.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-68.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Bridlemile"
+##                    ME      RMSE      MAE       MPE     MAPE     MASE
+## Training set 31627.08  67400.65 55885.25  5.880821 11.43641 1.000000
+## Test set     72193.75 114827.33 85556.25 11.177870 13.88858 1.530927
+##                    ACF1 Theil's U
+## Training set -0.3701048        NA
+## Test set     -0.2086699  1.259366
+## [1] "Holt Winters Accuracy for  Portland, OR - Bridlemile"
+##                     ME     RMSE      MAE        MPE      MAPE      MASE
+## Training set 3655.4625 40000.64 34524.93  0.3124594  7.293587 0.6177826
+## Test set     -161.7875 95837.20 84589.92 -1.9784828 15.266353 1.5136358
+##                    ACF1 Theil's U
+## Training set -0.3998330        NA
+## Test set     -0.2775668 0.9320451
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-69.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-70.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-71.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-72.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-73.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-74.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-75.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Woodlawn"
+##                    ME     RMSE      MAE       MPE    MAPE     MASE
+## Training set 40579.17 53588.09 41412.50 11.420732 11.7352 1.000000
+## Test set     43131.25 55605.68 47393.75  9.906776 11.0213 1.144431
+##                    ACF1 Theil's U
+## Training set 0.17321186        NA
+## Test set     0.01680431  1.818026
+## [1] "Holt Winters Accuracy for  Portland, OR - Woodlawn"
+##                      ME     RMSE      MAE        MPE      MAPE      MASE
+## Training set   9747.733 25814.80 20888.82   2.591646  6.438765 0.5044085
+## Test set     -56447.968 70403.35 62371.24 -13.238208 14.631919 1.5060970
+##                    ACF1 Theil's U
+## Training set 0.01754832        NA
+## Test set     0.35856337  2.789326
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-76.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-77.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-78.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-79.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-80.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-81.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-82.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Arnold Creek"
+##                     ME      RMSE       MAE       MPE     MAPE     MASE
+## Training set  28412.29  79886.81  69020.62  4.905684 15.03855 1.000000
+## Test set     113881.88 124964.34 113881.88 19.319223 19.31922 1.649969
+##                     ACF1 Theil's U
+## Training set -0.08022904        NA
+## Test set     -0.19961775  2.081004
+## [1] "Holt Winters Accuracy for  Portland, OR - Arnold Creek"
+##                     ME      RMSE       MAE      MPE     MAPE     MASE
+## Training set -17725.54  60303.48  44765.53 -4.59364 10.32179 0.648582
+## Test set     173444.97 180868.36 173444.97 29.25827 29.25827 2.512944
+##                       ACF1 Theil's U
+## Training set 0.01912064745        NA
+## Test set     0.00007580759  2.953076
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-83.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-84.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-85.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-86.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-87.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-88.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-89.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Maplewood"
+##                    ME      RMSE      MAE      MPE     MAPE     MASE
+## Training set 30716.67  51453.01 40141.67  7.66441 10.29720 1.000000
+## Test set     79978.12 129118.84 88890.62 13.65131 15.86422 2.214423
+##                     ACF1 Theil's U
+## Training set -0.15847626        NA
+## Test set      0.06313473  1.019325
+## [1] "Holt Winters Accuracy for  Portland, OR - Maplewood"
+##                    ME      RMSE      MAE      MPE     MAPE      MASE
+## Training set 11380.94  41674.99 31110.68 2.631446  7.94398 0.7750221
+## Test set     46141.88 113653.51 78365.62 6.593263 14.36105 1.9522265
+##                    ACF1 Theil's U
+## Training set -0.1659943        NA
+## Test set      0.1017166 0.7823319
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-90.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-91.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-92.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-93.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-94.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-95.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-96.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Foster-Powell"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 28170.83 34404.39 28170.83 10.62189 10.62189 1.000000
+## Test set     71092.88 83785.71 71667.88 19.44973 19.62948 2.544045
+##                    ACF1 Theil's U
+## Training set  0.1457925        NA
+## Test set     -0.2051904    2.5869
+## [1] "Holt Winters Accuracy for  Portland, OR - Foster-Powell"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  1473.453 21044.43 17209.39 0.3373027 6.860916 0.6108939
+## Test set     19451.887 35302.92 29587.08 5.2217612 8.239872 1.0502735
+##                    ACF1 Theil's U
+## Training set  0.1362560        NA
+## Test set     -0.1648538  1.036257
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-97.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-98.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-99.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-100.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-101.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-102.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-103.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Goose Hollow"
+##                    ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 21734.17 44006.72 35657.50  6.404028 12.34387 1.000000
+## Test set     49606.25 59248.00 51106.25 12.620370 13.08191 1.433254
+##                     ACF1 Theil's U
+## Training set  0.25908900        NA
+## Test set     -0.03548109  1.577117
+## [1] "Holt Winters Accuracy for  Portland, OR - Goose Hollow"
+##                      ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set   8925.191 39451.12 30436.95  2.825594 10.83317 0.8535917
+## Test set     -15715.879 43601.36 37458.13 -4.834546 10.31865 1.0504979
+##                      ACF1 Theil's U
+## Training set -0.001865459        NA
+## Test set      0.059582923  1.014562
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-104.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-105.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-106.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-107.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-108.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-109.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-110.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Rose City Park"
+##                    ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 32125.00 48771.17 39450.00  7.200072  8.93175 1.000000
+## Test set     67299.94 84523.43 67412.44 12.513561 12.53609 1.708807
+##                    ACF1 Theil's U
+## Training set -0.6946847        NA
+## Test set     -0.6733672  2.393273
+## [1] "Holt Winters Accuracy for  Portland, OR - Rose City Park"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  7090.340 29703.81 25342.55  1.377808 5.817465 0.6423966
+## Test set     -9591.336 22256.24 17298.84 -1.900490 3.346271 0.4385004
+##                    ACF1 Theil's U
+## Training set -0.5524141        NA
+## Test set     -0.5278417  0.634629
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-111.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-112.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-113.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-114.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-115.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-116.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-117.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Mount Scott-Arleta"
+##                    ME     RMSE      MAE      MPE     MAPE    MASE
+## Training set 34241.67 39026.04 34658.33 13.25535 13.41563 1.00000
+## Test set     59893.75 72458.90 59893.75 16.55672 16.55672 1.72812
+##                    ACF1 Theil's U
+## Training set  0.1798666        NA
+## Test set     -0.1818654  2.319356
+## [1] "Holt Winters Accuracy for  Portland, OR - Mount Scott-Arleta"
+##                       ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set    720.2183 18077.16 15559.02  0.1464793 6.043161 0.4489258
+## Test set     -18206.2823 37705.90 30648.87 -5.6171485 8.785513 0.8843147
+##                    ACF1 Theil's U
+## Training set -0.1116302        NA
+## Test set      0.0776605  1.298733
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-118.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-119.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-120.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-121.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-122.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-123.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-124.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Grant Park"
+##                    ME      RMSE       MAE       MPE     MAPE     MASE
+## Training set 20614.58  98848.48  76160.42  2.497144 14.03657 1.000000
+## Test set     88868.75 143085.97 136993.75 11.324999 20.03040 1.798753
+##                    ACF1 Theil's U
+## Training set -0.2319123        NA
+## Test set     -0.1809366  1.115956
+## [1] "Holt Winters Accuracy for  Portland, OR - Grant Park"
+##                    ME      RMSE       MAE      MPE      MAPE      MASE
+## Training set 14226.43  50067.79  40364.54 2.148620  7.055308 0.5299937
+## Test set     47770.79 110065.94 103515.88 5.326169 15.391896 1.3591821
+##                    ACF1 Theil's U
+## Training set -0.1047061        NA
+## Test set     -0.0488198 0.8699483
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-125.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-126.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-127.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-128.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-129.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-130.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-131.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Sullivan's Gulch"
+##                    ME      RMSE      MAE       MPE     MAPE     MASE
+## Training set 33345.83  89789.45  70912.5  5.679693 23.27595 1.000000
+## Test set     43456.25 186086.28 162543.8 -2.467904 40.25869 2.292173
+##                    ACF1 Theil's U
+## Training set  0.4395742        NA
+## Test set     -0.7016045 0.8156198
+## [1] "Holt Winters Accuracy for  Portland, OR - Sullivan's Gulch"
+##                      ME      RMSE       MAE        MPE     MAPE      MASE
+## Training set   26748.63  69735.31  50405.99   7.073889 16.93471 0.7108195
+## Test set     -170040.43 242230.71 197965.62 -54.999428 60.27253 2.7916886
+##                     ACF1 Theil's U
+## Training set  0.04921221        NA
+## Test set     -0.42478402 0.9631414
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-132.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-133.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-134.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-135.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-136.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-137.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-138.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Piedmont"
+##                    ME     RMSE     MAE      MPE     MAPE     MASE
+## Training set 35808.33 47175.99 37162.5 10.93031 11.36901 1.000000
+## Test set     68400.00 71823.34 68400.0 16.10926 16.10926 1.840565
+##                    ACF1 Theil's U
+## Training set 0.02855308        NA
+## Test set     0.18035498  2.358779
+## [1] "Holt Winters Accuracy for  Portland, OR - Piedmont"
+##                      ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  -4889.262 32915.01 28649.83 -1.722952 8.772781 0.7709338
+## Test set     -28254.579 40238.38 31400.71 -6.855872 7.613976 0.8449569
+##                     ACF1 Theil's U
+## Training set  0.02248601        NA
+## Test set     -0.30415451  1.468774
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-139.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-140.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-141.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-142.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-143.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-144.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-145.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Cully"
+##                    ME     RMSE      MAE      MPE     MAPE   MASE
+## Training set 27902.08 35077.38 27977.08 10.43927 10.47196 1.0000
+## Test set     76131.25 79934.16 76131.25 20.45272 20.45272 2.7212
+##                    ACF1 Theil's U
+## Training set -0.1979891        NA
+## Test set     -0.2029874  3.229818
+## [1] "Holt Winters Accuracy for  Portland, OR - Cully"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  5082.098 16379.30 12950.19 1.771158 4.952387 0.4628855
+## Test set     30640.942 33722.36 30640.94 8.258663 8.258663 1.0952157
+##                    ACF1 Theil's U
+## Training set -0.4464504        NA
+## Test set     -0.2358076  1.364573
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-146.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-147.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-148.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-149.pdf}
+
+\begin{verbatim}
+## Warning in HoltWinters(trainingData): optimization difficulties: ERROR:
+## ABNORMAL_TERMINATION_IN_LNSRCH
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-150.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-151.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-152.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Sabin"
+##                    ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 58945.83 76686.46 64320.83 11.099234 12.06379 1.000000
+## Test set     30690.62 96925.87 84909.38  2.880978 13.74469 1.320091
+##                    ACF1 Theil's U
+## Training set -0.1445815        NA
+## Test set      0.1750146 0.9498755
+## [1] "Holt Winters Accuracy for  Portland, OR - Sabin"
+##                     ME     RMSE      MAE        MPE      MAPE      MASE
+## Training set  10059.99 38671.55 32852.92   1.569589  6.268449 0.5107664
+## Test set     -54186.98 87022.41 67207.78 -10.811360 12.519006 1.0448836
+##                     ACF1 Theil's U
+## Training set -0.19963546        NA
+## Test set      0.03831579 0.7227155
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-153.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-154.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-155.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-156.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-157.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-158.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-159.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Argay"
+##                    ME     RMSE      MAE       MPE    MAPE     MASE
+## Training set 20018.54 25568.84 21293.54  7.339507  7.8380 1.000000
+## Test set     66925.00 74811.42 66925.00 18.105602 18.1056 3.142972
+##                   ACF1 Theil's U
+## Training set 0.4971198        NA
+## Test set     0.5649304   2.58327
+## [1] "Holt Winters Accuracy for  Portland, OR - Argay"
+##                      ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set   102.9445 12073.11 10358.78 -0.1539419 3.930369 0.4864751
+## Test set     22299.5443 37092.60 34584.25  5.5583398 9.698481 1.6241663
+##                    ACF1 Theil's U
+## Training set 0.08157386        NA
+## Test set     0.34389143  1.239011
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-160.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-161.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-162.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-163.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-164.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-165.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-166.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Brooklyn"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 46862.50 61701.44 52766.67 12.58542 14.17487 1.000000
+## Test set     54603.12 65942.43 54603.12 11.38663 11.38663 1.034803
+##                    ACF1 Theil's U
+## Training set -0.2393351        NA
+## Test set     -0.1558405  1.287384
+## [1] "Holt Winters Accuracy for  Portland, OR - Brooklyn"
+##                      ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set  -4202.151 32459.28 28896.02 -0.816203  8.036047 0.5476189
+## Test set     -29209.578 69379.46 56423.04 -6.932276 12.402869 1.0692933
+##                    ACF1 Theil's U
+## Training set -0.1331938        NA
+## Test set      0.1122148  1.281169
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-167.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-168.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-169.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-170.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-171.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-172.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-173.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Madison South"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 24010.42 29373.37 26972.92 10.16266 11.68599 1.000000
+## Test set     65565.62 69929.42 65565.62 19.78330 19.78330 2.430795
+##                    ACF1 Theil's U
+## Training set -0.2641090        NA
+## Test set      0.3859965    3.3578
+## [1] "Holt Winters Accuracy for  Portland, OR - Madison South"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  3752.068 13722.51 11258.98 1.526511 5.091013 0.4174180
+## Test set     22626.076 26676.68 25616.88 6.738842 7.822665 0.9497261
+##                     ACF1 Theil's U
+## Training set -0.24457567        NA
+## Test set      0.06882079  1.298492
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-174.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-175.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-176.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-177.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-178.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-179.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-180.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Woodstock"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 48695.83 55994.24 48695.83 13.742448 13.742448 1.000000
+## Test set     31436.88 48422.89 42161.88  6.747141  9.473223 0.865821
+##                    ACF1 Theil's U
+## Training set  0.5477999        NA
+## Test set     -0.5439267 0.9815581
+## [1] "Holt Winters Accuracy for  Portland, OR - Woodstock"
+##                      ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set   6624.219 23521.59 17716.26  1.775303 5.095996 0.3638148
+## Test set     -14255.639 38702.22 33593.84 -3.748391 7.884817 0.6898710
+##                    ACF1 Theil's U
+## Training set  0.0867658        NA
+## Test set     -0.5637674 0.6571253
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-181.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-182.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-183.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-184.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-185.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-186.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-187.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Overlook"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 42536.21 69560.86 54452.88 11.26706 14.77167 1.000000
+## Test set     61199.25 82270.59 65383.50 12.52188 13.82027 1.200735
+##                    ACF1 Theil's U
+## Training set 0.02224491        NA
+## Test set     0.39494903 0.8909995
+## [1] "Holt Winters Accuracy for  Portland, OR - Overlook"
+##                     ME      RMSE      MAE        MPE     MAPE     MASE
+## Training set -16873.62  61536.13 49797.75  -5.453462 13.99641 0.914511
+## Test set     -74228.71 114049.64 93745.15 -19.224289 23.13915 1.721583
+##                   ACF1 Theil's U
+## Training set 0.1097878        NA
+## Test set     0.5823110  1.934581
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-188.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-189.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-190.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-191.pdf}
+
+\begin{verbatim}
+## Warning in HoltWinters(oneNeighborhood.timeseries): optimization
+## difficulties: ERROR: ABNORMAL_TERMINATION_IN_LNSRCH
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-192.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-193.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-194.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Ashcreek"
+##                   ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 26487.5 40253.30 31654.17  7.371526  8.911923 1.000000
+## Test set     75962.5 87391.11 81125.00 16.266521 17.703543 2.562854
+##                      ACF1 Theil's U
+## Training set -0.511188537        NA
+## Test set      0.004786321  1.476416
+## [1] "Holt Winters Accuracy for  Portland, OR - Ashcreek"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  6387.543 23608.56 19174.75 1.633387 5.578656 0.6057576
+## Test set     14207.376 45530.32 38118.61 2.334721 8.588896 1.2042210
+##                    ACF1 Theil's U
+## Training set -0.3525892        NA
+## Test set      0.3002404 0.7708392
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-195.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-196.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-197.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-198.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-199.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-200.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-201.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Hosford-Abernethy"
+##                     ME      RMSE      MAE       MPE     MAPE     MASE
+## Training set  24141.67  84743.25  73400.0  3.087208 16.89885 1.000000
+## Test set     128268.06 150972.47 128268.1 21.675904 21.67590 1.747521
+##                    ACF1 Theil's U
+## Training set -0.2062629        NA
+## Test set     -0.2420950  2.847031
+## [1] "Holt Winters Accuracy for  Portland, OR - Hosford-Abernethy"
+##                     ME      RMSE       MAE       MPE     MAPE      MASE
+## Training set -23720.44  75014.86  57507.43 -6.773556 13.68640 0.7834799
+## Test set     225353.86 241641.63 225353.86 37.825318 37.82532 3.0702161
+##                    ACF1 Theil's U
+## Training set -0.1096262        NA
+## Test set      0.2536206  4.447518
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-202.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-203.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-204.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-205.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-206.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-207.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-208.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - East Portland"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 24283.29 26063.91 24283.29 11.47971 11.47971 1.000000
+## Test set     51493.88 53919.74 51493.88 17.67709 17.67709 2.120548
+##                   ACF1 Theil's U
+## Training set 0.5088656        NA
+## Test set     0.5276834  4.640547
+## [1] "Holt Winters Accuracy for  Portland, OR - East Portland"
+##                     ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set -1277.575 8999.595 6296.117 -0.5957286 3.139479 0.2592777
+## Test set     -1245.335 4761.394 3699.375 -0.4098233 1.286864 0.1523424
+##                     ACF1 Theil's U
+## Training set -0.02832162        NA
+## Test set      0.44996132 0.3845842
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-209.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-210.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-211.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-212.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-213.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-214.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-215.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Parkrose Heights"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 26577.71 38190.48 33777.71 11.93961 15.68953 1.000000
+## Test set     56222.69 60680.04 56222.69 18.70299 18.70299 1.664491
+##                    ACF1 Theil's U
+## Training set -0.3733233        NA
+## Test set      0.2881616  3.043809
+## [1] "Holt Winters Accuracy for  Portland, OR - Parkrose Heights"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  4937.859 23558.97 18264.18 1.897135 8.962044 0.5407169
+## Test set     12766.014 17907.67 14126.63 4.096304 4.586601 0.4182235
+##                    ACF1 Theil's U
+## Training set -0.3024077        NA
+## Test set     -0.1525747 0.9359406
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-216.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-217.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-218.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-219.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-220.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-221.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-222.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Lents-Powellhurst-Gilbert"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 25492.08 31057.62 26500.42 13.80422 14.38381 1.000000
+## Test set     69478.12 77200.99 69478.12 24.47652 24.47652 2.621775
+##                    ACF1 Theil's U
+## Training set 0.04350761        NA
+## Test set     0.30472902  3.173634
+## [1] "Holt Winters Accuracy for  Portland, OR - Lents-Powellhurst-Gilbert"
+##                     ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set -4551.209 19922.77 13819.12 -2.498998  8.078837 0.5214679
+## Test set     29414.995 37662.27 29415.00 10.251580 10.251580 1.1099824
+##                     ACF1 Theil's U
+## Training set -0.07191105        NA
+## Test set      0.25198955  1.624651
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-223.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-224.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-225.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-226.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-227.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-228.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-229.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Southwest Hills"
+##                     ME      RMSE       MAE       MPE     MAPE     MASE
+## Training set  27320.83  86904.19  65570.83  3.293419 10.25794 1.000000
+## Test set     109350.00 141193.39 113300.00 13.225928 13.76976 1.727902
+##                   ACF1 Theil's U
+## Training set 0.3448884        NA
+## Test set     0.3394618  2.932267
+## [1] "Holt Winters Accuracy for  Portland, OR - Southwest Hills"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set -16548.24 63768.52 47081.93 -3.471193 7.791971 0.7180316
+## Test set      62273.94 92508.82 73194.25  7.467003 8.935024 1.1162622
+##                   ACF1 Theil's U
+## Training set 0.1101026        NA
+## Test set     0.2268136  1.943598
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-230.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-231.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-232.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-233.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-234.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-235.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-236.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Center"
+##                    ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set 53416.62 78301.88 72766.62 13.379662 19.99934 1.0000000
+## Test set     38987.50 74494.99 56287.50  7.216654 11.40567 0.7735346
+##                    ACF1 Theil's U
+## Training set -0.2422235        NA
+## Test set     -0.2887973  1.225086
+## [1] "Holt Winters Accuracy for  Portland, OR - Center"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  11062.33 45753.25 37116.06  2.546252 11.32352 0.5100699
+## Test set     -28706.33 70514.45 61781.84 -7.130384 13.31302 0.8490409
+##                    ACF1 Theil's U
+## Training set -0.2586917        NA
+## Test set     -0.2892384  1.151709
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-237.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-238.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-239.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-240.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-241.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-242.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-243.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Parkrose"
+##                    ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 18095.96 28135.46 24628.88  8.218918 11.40359 1.000000
+## Test set     56905.62 62410.31 56905.62 19.707513 19.70751 2.310525
+##                    ACF1 Theil's U
+## Training set 0.05834388        NA
+## Test set     0.09738893   2.38063
+## [1] "Holt Winters Accuracy for  Portland, OR - Parkrose"
+##                     ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set -4527.718 18437.76 16262.11 -2.119749  7.624555 0.6602863
+## Test set     40569.691 46372.66 40569.69 13.951975 13.951975 1.6472409
+##                    ACF1 Theil's U
+## Training set -0.1829793        NA
+## Test set     -0.2558337  1.789859
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-244.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-245.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-246.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-247.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-248.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-249.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-250.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Montavilla"
+##                    ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 23637.50 29533.97 25645.83  9.159189 10.07329 1.000000
+## Test set     67081.25 70921.96 67081.25 19.410611 19.41061 2.615678
+##                     ACF1 Theil's U
+## Training set -0.25136652        NA
+## Test set      0.01089043  3.246148
+## [1] "Holt Winters Accuracy for  Portland, OR - Montavilla"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  4164.888 17559.82 15827.99 1.473139 6.345773 0.6171760
+## Test set     23341.457 25977.05 23341.46 6.736969 6.736969 0.9101462
+##                      ACF1 Theil's U
+## Training set  0.006204082        NA
+## Test set     -0.204356961  1.227308
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-251.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-252.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-253.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-254.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-255.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-256.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-257.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Arbor Lodge"
+##                    ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set 41462.50 47858.75 43120.83 11.696125 12.299264 1.0000000
+## Test set     38493.75 51063.89 42243.75  8.469569  9.417062 0.9796599
+##                    ACF1 Theil's U
+## Training set  0.2263326        NA
+## Test set     -0.2183350  1.209817
+## [1] "Holt Winters Accuracy for  Portland, OR - Arbor Lodge"
+##                      ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set   2292.375 17844.92 12573.27  0.8283594 3.661753 0.2915822
+## Test set     -26718.509 45629.90 39422.25 -6.6643122 9.270743 0.9142275
+##                    ACF1 Theil's U
+## Training set -0.1144846        NA
+## Test set      0.1760275  1.265668
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-258.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-259.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-260.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-261.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-262.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-263.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-264.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Marshall Park"
+##                   ME     RMSE   MAE      MPE     MAPE      MASE       ACF1
+## Training set 46412.5 121966.7 91100 8.103518 18.93786 1.0000000  0.3774393
+## Test set     35680.0  83013.6 51930 5.917684  9.30587 0.5700329 -0.1618543
+##              Theil's U
+## Training set        NA
+## Test set      1.229466
+## [1] "Holt Winters Accuracy for  Portland, OR - Marshall Park"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  24724.84 85664.85 63825.75  3.718840 13.74124 0.7006119
+## Test set     -38249.46 71714.15 60135.20 -8.140546 11.84271 0.6601010
+##                    ACF1 Theil's U
+## Training set  0.2859306        NA
+## Test set     -0.2908618  1.054253
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-265.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-266.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-267.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-268.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-269.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-270.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-271.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Brentwood"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 21833.33 28568.52 21833.33  9.771475  9.771475 1.000000
+## Test set     64306.25 66898.42 64306.25 20.885691 20.885691 2.945324
+##                    ACF1 Theil's U
+## Training set -0.0649892        NA
+## Test set      0.1421418  4.440727
+## [1] "Holt Winters Accuracy for  Portland, OR - Brentwood"
+##                    ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set  3514.74 13581.07 11051.12  1.386235  4.878437 0.5061581
+## Test set     35681.27 37877.09 35681.27 11.477190 11.477190 1.6342564
+##                    ACF1 Theil's U
+## Training set -0.1040843        NA
+## Test set     -0.1806263  2.588907
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-272.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-273.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-274.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-275.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-276.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-277.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-278.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Pleasant Valley"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 37164.21 54694.31 46897.54 11.53035 15.19331 1.000000
+## Test set     47831.62 57347.08 53194.12 11.70279 13.35279 1.134263
+##                      ACF1 Theil's U
+## Training set -0.217950563        NA
+## Test set      0.003662754  1.586609
+## [1] "Holt Winters Accuracy for  Portland, OR - Pleasant Valley"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set   8641.11 34234.70 29830.05  2.957559 9.781364 0.6360686
+## Test set     -33703.27 37468.43 33703.27 -8.741821 8.741821 0.7186574
+##                     ACF1 Theil's U
+## Training set -0.14557402        NA
+## Test set     -0.07109168 0.9177655
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-279.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-280.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-281.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-282.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-283.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-284.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-285.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Roseway"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 27718.75 37018.10 27985.42  8.532271  8.633481 1.000000
+## Test set     74187.50 76830.19 74187.50 17.679685 17.679685 2.650934
+##                    ACF1 Theil's U
+## Training set -0.4592966        NA
+## Test set     -0.1553340  3.041488
+## [1] "Holt Winters Accuracy for  Portland, OR - Roseway"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  5615.089 21920.54 18265.40 1.518765 5.890964 0.6526755
+## Test set     27211.391 34444.32 29752.79 6.405155 7.040665 1.0631535
+##                     ACF1 Theil's U
+## Training set -0.49422261        NA
+## Test set      0.03530827  1.357981
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-286.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-287.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-288.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-289.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-290.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-291.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-292.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Downtown Portland"
+##                    ME     RMSE      MAE      MPE      MAPE      MASE
+## Training set 24658.33 58726.57 48825.08 5.893082 14.261249 1.0000000
+## Test set     31012.44 52434.49 37899.94 7.169284  9.018526 0.7762391
+##                     ACF1 Theil's U
+## Training set  0.40846234        NA
+## Test set     -0.08670784  1.380546
+## [1] "Holt Winters Accuracy for  Portland, OR - Downtown Portland"
+##                      ME     RMSE      MAE        MPE      MAPE      MASE
+## Training set  -6583.342 36329.56 32161.04  -2.890142  9.852016 0.6586992
+## Test set     -39221.517 45022.65 39221.52 -10.181524 10.181524 0.8033067
+##                     ACF1 Theil's U
+## Training set  0.04812447        NA
+## Test set     -0.46561705 0.9476326
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-293.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-294.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-295.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-296.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-297.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-298.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-299.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - South Tabor"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 29104.58 40039.39 31195.42  8.806643  9.586925 1.000000
+## Test set     53784.25 62544.93 57034.25 12.929183 13.791252 1.828289
+##                    ACF1 Theil's U
+## Training set  0.1787961        NA
+## Test set     -0.3473204  2.157699
+## [1] "Holt Winters Accuracy for  Portland, OR - South Tabor"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  10326.16 26778.48 20906.62  3.225652 6.666289 0.6701823
+## Test set     -16019.82 35877.44 26767.97 -4.048310 6.584049 0.8580737
+##                     ACF1 Theil's U
+## Training set -0.02116555        NA
+## Test set     -0.12750839  1.192957
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-300.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-301.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-302.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-303.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-304.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-305.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-306.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Hayhurst"
+##                    ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 48310.42 64431.88 54214.58 11.737230 13.60740 1.000000
+## Test set     39021.88 84894.26 79671.88  7.489415 16.56463 1.469565
+##                    ACF1 Theil's U
+## Training set -0.4680673        NA
+## Test set     -0.1938468  1.465804
+## [1] "Holt Winters Accuracy for  Portland, OR - Hayhurst"
+##                     ME     RMSE      MAE        MPE      MAPE      MASE
+## Training set   4766.39 45059.93 35695.49  0.5679515  9.273862 0.6584113
+## Test set     -42767.63 77270.65 56571.91 -9.5059432 12.389894 1.0434814
+##                     ACF1 Theil's U
+## Training set -0.38275242        NA
+## Test set     -0.05802772    1.3834
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-307.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-308.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-309.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-310.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-311.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-312.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-313.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Lents"
+##                   ME    RMSE     MAE      MPE     MAPE     MASE      ACF1
+## Training set 26775.0 30188.6 26775.0 13.68363 13.68363 1.000000 0.3616515
+## Test set     54212.5 60292.0 54212.5 19.17825 19.17825 2.024743 0.2659157
+##              Theil's U
+## Training set        NA
+## Test set      3.208269
+## [1] "Holt Winters Accuracy for  Portland, OR - Lents"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set -2848.524 14633.37 11950.42 -1.469713 6.248727 0.4463275
+## Test set     -7702.609 12413.62 11769.59 -2.983660 4.402677 0.4395737
+##                      ACF1 Theil's U
+## Training set  0.006321704        NA
+## Test set     -0.248775278  0.619744
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-314.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-315.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-316.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-317.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-318.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-319.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-320.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Richmond"
+##                   ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 40712.5 45985.54 40967.25 9.329211 9.402337 1.000000
+## Test set     46725.0 53093.51 46725.00 8.765501 8.765501 1.140545
+##                    ACF1 Theil's U
+## Training set  0.5158709        NA
+## Test set     -0.1065441  1.471393
+## [1] "Holt Winters Accuracy for  Portland, OR - Richmond"
+##                      ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set   3537.817 16382.08 13645.64  0.9689242 3.159473 0.3330864
+## Test set     -14981.338 22996.83 18435.58 -3.0052432 3.660294 0.4500078
+##                    ACF1 Theil's U
+## Training set  0.1547946        NA
+## Test set     -0.3283517 0.5034104
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-321.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-322.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-323.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-324.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-325.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-326.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-327.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Alameda"
+##                    ME     RMSE      MAE      MPE     MAPE    MASE
+## Training set 41029.17 80371.52 61270.83 6.100513 10.22776 1.00000
+## Test set     62806.25 84691.27 62806.25 8.676140  8.67614 1.02506
+##                     ACF1 Theil's U
+## Training set  0.47390460        NA
+## Test set     -0.02982154  2.134239
+## [1] "Holt Winters Accuracy for  Portland, OR - Alameda"
+##                    ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set 12429.71 45223.36 38933.54 1.593605 6.705096 0.6354335
+## Test set     15044.70 35288.22 30080.79 2.009162 4.202977 0.4909479
+##                   ACF1 Theil's U
+## Training set 0.5012734        NA
+## Test set     0.2153512 0.9131303
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-328.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-329.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-330.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-331.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-332.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-333.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-334.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Forest Park"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 21970.83 59451.96 49045.83 3.159106 7.760933 1.000000
+## Test set     54436.56 68703.88 54936.56 7.585763 7.652657 1.120107
+##                     ACF1 Theil's U
+## Training set  0.09533179        NA
+## Test set     -0.32321601  1.159326
+## [1] "Holt Winters Accuracy for  Portland, OR - Forest Park"
+##                    ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set 12278.67 50542.74 43123.10  1.740898  6.955671 0.8792409
+## Test set     89850.06 96785.76 89850.06 12.460045 12.460045 1.8319611
+##                    ACF1 Theil's U
+## Training set -0.1217892        NA
+## Test set     -0.2391897  1.672399
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-335.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-336.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-337.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-338.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-339.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-340.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-341.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Boise"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 50060.42 75839.13 57135.42 11.14867 12.93637 1.000000
+## Test set     61750.00 95711.08 67750.00 10.88397 12.04902 1.185779
+##                    ACF1 Theil's U
+## Training set  0.3781009        NA
+## Test set     -0.5438133  1.399149
+## [1] "Holt Winters Accuracy for  Portland, OR - Boise"
+##                     ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set  5084.242 46854.39 38026.28  0.5783518 8.938774 0.6655466
+## Test set     -4192.653 65025.10 52024.43 -1.4866809 9.651863 0.9105461
+##                    ACF1 Theil's U
+## Training set  0.1796326        NA
+## Test set     -0.5735509 0.8796162
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-342.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-343.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-344.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-345.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-346.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-347.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-348.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Creston-Kenilworth"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 35254.17 39362.99 35254.17 10.33272 10.33272 1.000000
+## Test set     63448.25 70407.44 63448.25 14.12681 14.12681 1.799738
+##                    ACF1 Theil's U
+## Training set -0.2793307        NA
+## Test set      0.3083121  2.450752
+## [1] "Holt Winters Accuracy for  Portland, OR - Creston-Kenilworth"
+##                    ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set 3792.630 17999.58 15297.98 1.307767 4.523413 0.4339339
+## Test set     7487.638 19211.34 17059.26 1.544332 3.868534 0.4838934
+##                      ACF1 Theil's U
+## Training set -0.002380788        NA
+## Test set      0.280738196 0.6421753
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-349.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-350.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-351.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-352.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-353.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-354.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-355.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Mount Tabor"
+##                    ME     RMSE      MAE      MPE      MAPE     MASE
+## Training set 44258.33 64205.60 49241.67 8.808652  9.933471 1.000000
+## Test set     29431.25 75773.85 65681.25 4.692525 11.719552 1.333855
+##                    ACF1 Theil's U
+## Training set -0.1947356        NA
+## Test set     -0.4614675  1.826477
+## [1] "Holt Winters Accuracy for  Portland, OR - Mount Tabor"
+##                     ME     RMSE      MAE        MPE      MAPE     MASE
+## Training set  12691.60 45557.22 33411.41   2.368281  6.685923 0.678519
+## Test set     -73761.82 84071.61 73761.82 -13.670447 13.670447 1.497955
+##                    ACF1 Theil's U
+## Training set -0.3503649        NA
+## Test set     -0.2867079   2.04791
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-356.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-357.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-358.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-359.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-360.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-361.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-362.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Concordia"
+##                    ME    RMSE      MAE       MPE      MAPE     MASE
+## Training set 30840.42 43162.7 32040.42  7.712864  8.032864 1.000000
+## Test set     75275.00 89080.5 75275.00 14.731466 14.731466 2.349376
+##                      ACF1 Theil's U
+## Training set -0.497229634        NA
+## Test set     -0.003898899  2.040193
+## [1] "Holt Winters Accuracy for  Portland, OR - Concordia"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  7438.277 30183.74 23354.48 1.867692 5.988275 0.7289068
+## Test set     18567.932 44035.87 33893.22 3.313848 6.683888 1.0578270
+##                    ACF1 Theil's U
+## Training set -0.4583025        NA
+## Test set     -0.2075833  1.021589
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-363.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-364.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-365.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-366.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-367.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-368.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-369.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Hayden Island"
+##                     ME     RMSE      MAE        MPE     MAPE     MASE
+## Training set  27295.83 73879.42 54887.50   6.484019 21.12987 1.000000
+## Test set     -39989.19 78998.14 55876.69 -16.870999 22.69902 1.018022
+##                     ACF1 Theil's U
+## Training set  0.04153223        NA
+## Test set     -0.22459486 0.7419511
+## [1] "Holt Winters Accuracy for  Portland, OR - Hayden Island"
+##                     ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set  16310.96 59796.46 44844.05   3.818842 16.49749 0.8170176
+## Test set     -45178.14 76580.14 57609.06 -18.860808 23.40705 1.0495844
+##                     ACF1 Theil's U
+## Training set -0.03379111        NA
+## Test set     -0.27491857 0.7659379
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-370.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-371.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-372.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-373.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-374.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-375.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-376.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Sunnyside"
+##                    ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set 46535.42 61605.86 49610.42 10.272501 11.10516 1.0000000
+## Test set     17412.50 43498.60 37400.00  2.646635  7.55076 0.7538739
+##                   ACF1 Theil's U
+## Training set 0.6787026        NA
+## Test set     0.4243160 0.5956491
+## [1] "Holt Winters Accuracy for  Portland, OR - Sunnyside"
+##                      ME     RMSE      MAE        MPE      MAPE      MASE
+## Training set   7310.966 25246.75 20243.02   1.370765  4.834325 0.4080398
+## Test set     -74983.033 85996.18 79228.47 -15.937449 16.675786 1.5970128
+##                      ACF1 Theil's U
+## Training set  0.112575999        NA
+## Test set     -0.009466582  1.187051
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-377.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-378.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-379.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-380.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-381.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-382.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-383.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Eastmoreland"
+##                    ME     RMSE      MAE      MPE      MAPE     MASE
+## Training set 51124.96 69253.55 61033.29 7.934531  9.659494 1.000000
+## Test set     47265.75 99361.03 85759.38 5.742741 11.750853 1.405125
+##                     ACF1 Theil's U
+## Training set -0.34545249        NA
+## Test set      0.07046865  1.603243
+## [1] "Holt Winters Accuracy for  Portland, OR - Eastmoreland"
+##                     ME      RMSE      MAE       MPE      MAPE      MASE
+## Training set  13029.30  38427.08 33884.44  1.847605  5.412951 0.5551796
+## Test set     -62284.58 108381.42 78867.41 -9.495348 11.638847 1.2922032
+##                    ACF1 Theil's U
+## Training set -0.2297927        NA
+## Test set      0.3556905  1.803213
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-384.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-385.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-386.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-387.pdf}
+
+\begin{verbatim}
+## Warning in HoltWinters(trainingData): optimization difficulties: ERROR:
+## ABNORMAL_TERMINATION_IN_LNSRCH
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-388.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-389.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-390.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Corbett"
+##                    ME     RMSE      MAE      MPE      MAPE     MASE
+## Training set 16929.17 45178.89 38016.67 3.626937  9.414626 1.000000
+## Test set     45475.00 60321.06 49725.00 9.259609 10.259609 1.307979
+##                    ACF1 Theil's U
+## Training set  0.2708537        NA
+## Test set     -0.2178142  1.514939
+## [1] "Holt Winters Accuracy for  Portland, OR - Corbett"
+##                      ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set   7437.785 30218.36 21033.54  1.865775  5.551639 0.5532715
+## Test set     -41983.623 59197.66 48456.70 -9.338395 10.604198 1.2746173
+##                    ACF1 Theil's U
+## Training set -0.1589509        NA
+## Test set     -0.1806312  1.290894
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-391.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-392.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-393.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-394.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-395.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-396.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-397.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Northeast Portland"
+##                    ME     RMSE      MAE       MPE      MAPE   MASE
+## Training set 27050.00 30233.91 27050.00  6.639725  6.639725 1.0000
+## Test set     94171.88 97946.57 94171.88 17.690304 17.690304 3.4814
+##                   ACF1 Theil's U
+## Training set 0.2416746        NA
+## Test set     0.5011262  5.293107
+## [1] "Holt Winters Accuracy for  Portland, OR - Northeast Portland"
+##                     ME     RMSE      MAE        MPE      MAPE      MASE
+## Training set  3740.124 12857.60 10789.74  0.9104444  2.636921 0.3988814
+## Test set     53291.417 54670.11 53291.42 10.0448708 10.044871 1.9701078
+##                    ACF1 Theil's U
+## Training set 0.09199848        NA
+## Test set     0.37810643  2.975952
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-398.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-399.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-400.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-401.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-402.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-403.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-404.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - North Portland"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 27838.54 29734.78 27838.54  9.936051  9.936051 1.000000
+## Test set     54745.44 59264.66 54745.44 14.845566 14.845566 1.966534
+##                     ACF1 Theil's U
+## Training set  0.28192717        NA
+## Test set     -0.03667067  3.422276
+## [1] "Holt Winters Accuracy for  Portland, OR - North Portland"
+##                    ME      RMSE      MAE      MPE     MAPE      MASE
+## Training set 2723.962  8653.144 7571.670 1.039432 2.800171 0.2719852
+## Test set     6441.030 13605.533 8997.244 1.715107 2.405099 0.3231938
+##                     ACF1 Theil's U
+## Training set  0.07943853        NA
+## Test set     -0.17041426 0.8126438
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-405.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-406.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-407.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-408.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-409.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-410.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-411.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Brentwood-Darlington"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 21833.33 28568.52 21833.33  9.771475  9.771475 1.000000
+## Test set     64306.25 66898.42 64306.25 20.885691 20.885691 2.945324
+##                    ACF1 Theil's U
+## Training set -0.0649892        NA
+## Test set      0.1421418  4.440727
+## [1] "Holt Winters Accuracy for  Portland, OR - Brentwood-Darlington"
+##                    ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set  3514.74 13581.07 11051.12  1.386235  4.878437 0.5061581
+## Test set     35681.27 37877.09 35681.27 11.477190 11.477190 1.6342564
+##                    ACF1 Theil's U
+## Training set -0.1040843        NA
+## Test set     -0.1806263  2.588907
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-412.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-413.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-414.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-415.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-416.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-417.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-418.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Central Northeast Portland"
+##                    ME     RMSE      MAE      MPE      MAPE    MASE
+## Training set 24104.17 33731.90 26604.17  7.26612  8.072832 1.00000
+## Test set     70600.00 72770.46 70600.00 16.79351 16.793515 2.65372
+##                     ACF1 Theil's U
+## Training set -0.07646058        NA
+## Test set      0.11744408  3.990699
+## [1] "Holt Winters Accuracy for  Portland, OR - Central Northeast Portland"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  2336.954 16650.73 12807.48 0.6575603 3.905165 0.4814087
+## Test set     24272.646 28743.92 24272.65 5.7544429 5.754443 0.9123626
+##                    ACF1 Theil's U
+## Training set -0.1170061        NA
+## Test set     -0.4656934  1.622999
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-419.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-420.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-421.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-422.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-423.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-424.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-425.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Neighbors West-Northwest"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 20070.83 44171.21 35000.00  4.04202  7.48934 1.000000
+## Test set     65486.88 72846.69 65486.88 11.87919 11.87919 1.871054
+##                   ACF1 Theil's U
+## Training set -0.162760        NA
+## Test set     -0.440962  1.340635
+## [1] "Holt Winters Accuracy for  Portland, OR - Neighbors West-Northwest"
+##                     ME    RMSE      MAE      MPE     MAPE      MASE
+## Training set  7470.536 26041.6 21423.14 1.426696 4.683971 0.6120896
+## Test set     36516.224 52605.4 43618.42 6.414991 7.807667 1.2462407
+##                    ACF1 Theil's U
+## Training set -0.1291345        NA
+## Test set      0.1132227 0.9186544
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-426.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-427.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-428.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-429.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-430.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-431.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-432.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Southeast Uplift"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 31033.33 32395.92 31033.33  9.859731  9.859731 1.000000
+## Test set     54887.50 57380.87 54887.50 13.494059 13.494059 1.768663
+##                    ACF1 Theil's U
+## Training set -0.2683534        NA
+## Test set      0.3459222  3.262262
+## [1] "Holt Winters Accuracy for  Portland, OR - Southeast Uplift"
+##                     ME     RMSE       MAE       MPE     MAPE      MASE
+## Training set  2587.141  9009.14  8014.197 0.8898649 2.600552 0.2582448
+## Test set     10530.991 15964.41 12863.472 2.5647751 3.165908 0.4145050
+##                    ACF1 Theil's U
+## Training set -0.1452696        NA
+## Test set     -0.1774669 0.9528202
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-433.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-434.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-435.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-436.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-437.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-438.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-439.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Vernon"
+##                    ME      RMSE      MAE       MPE     MAPE     MASE
+## Training set 37404.17  77364.32  60337.5  7.645543 14.73445 1.000000
+## Test set     90306.25 130786.48 117781.2 15.853702 21.21359 1.952041
+##                    ACF1 Theil's U
+## Training set -0.3335330        NA
+## Test set     -0.1267059  1.439005
+## [1] "Holt Winters Accuracy for  Portland, OR - Vernon"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 17743.60 64185.16 46009.27 2.724693 11.20935 0.762532
+## Test set     55035.36 99859.44 85557.41 9.280515 15.15089 1.417981
+##                     ACF1 Theil's U
+## Training set -0.24769643        NA
+## Test set     -0.07078851  1.010076
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-440.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-441.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-442.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-443.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-444.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-445.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-446.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Glenfair"
+##                   ME     RMSE      MAE       MPE     MAPE    MASE
+## Training set 21262.5 33652.26 22095.83  9.222198  9.66091 1.00000
+## Test set     76037.5 94517.57 76037.50 22.112995 22.11300 3.44126
+##                     ACF1 Theil's U
+## Training set -0.03121027        NA
+## Test set      0.33756510  1.875575
+## [1] "Holt Winters Accuracy for  Portland, OR - Glenfair"
+##                     ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set -2534.334 18730.87 14458.28 -1.588949  7.01328 0.654344
+## Test set     15280.333 55756.25 41216.72  2.481421 11.91926 1.865362
+##                     ACF1 Theil's U
+## Training set -0.06162271        NA
+## Test set      0.22362600   1.09289
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-447.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-448.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-449.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-450.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-451.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-452.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-453.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Buckman"
+##                    ME      RMSE     MAE       MPE     MAPE     MASE
+## Training set 42141.67  82651.29 71875.0  8.301726 15.73630 1.000000
+## Test set     87512.50 118880.30 97312.5 14.358154 16.27222 1.353913
+##                     ACF1 Theil's U
+## Training set -0.57922695        NA
+## Test set      0.01982666 0.8993446
+## [1] "Holt Winters Accuracy for  Portland, OR - Buckman"
+##                      ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set   1513.833 64196.76 54976.14 -0.7951208 12.62032 0.7648854
+## Test set     -12627.235 74251.58 62874.11 -3.9186153 12.13310 0.8747703
+##                     ACF1 Theil's U
+## Training set -0.30530737        NA
+## Test set     -0.05663715 0.5672729
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-454.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-455.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-456.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-457.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-458.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-459.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-460.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Crestwood"
+##                     ME      RMSE      MAE       MPE     MAPE     MASE
+## Training set  68575.00  99567.87  78750.0  17.82131 21.16839 1.000000
+## Test set     -47940.81 163389.34 115896.7 -22.95428 39.88567 1.471704
+##                    ACF1 Theil's U
+## Training set -0.4260496        NA
+## Test set     -0.2779826 0.9649422
+## [1] "Holt Winters Accuracy for  Portland, OR - Crestwood"
+##                      ME      RMSE      MAE        MPE     MAPE      MASE
+## Training set   18008.33  63826.76  49675.0   3.437958 12.76720 0.6307937
+## Test set     -128715.81 199579.04 141278.3 -44.519402 47.51761 1.7940103
+##                    ACF1 Theil's U
+## Training set -0.3255043        NA
+## Test set     -0.2572900  1.238584
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-461.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-462.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-463.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-464.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-465.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-466.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-467.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - West Portland Park"
+##                    ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set 27116.67 62332.68 55066.67  6.999479 18.17057 1.0000000
+## Test set     48887.50 56043.42 48887.50 12.049612 12.04961 0.8877875
+##                    ACF1 Theil's U
+## Training set -0.3548985        NA
+## Test set     -0.4392110  1.334325
+## [1] "Holt Winters Accuracy for  Portland, OR - West Portland Park"
+##                    ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set 14415.69 55945.71 45190.36 2.366795 14.86647 0.8206482
+## Test set     16757.95 42719.08 38928.62 3.475793 10.17551 0.7069362
+##                     ACF1 Theil's U
+## Training set -0.25757987        NA
+## Test set      0.03868145 0.9605563
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-468.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-469.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-470.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-471.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-472.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-473.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-474.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Powellhurst-Gilbert"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 23341.83 27716.87 23416.83 11.76336 11.80096 1.000000
+## Test set     51993.75 55039.29 51993.75 18.95209 18.95209 2.220358
+##                   ACF1 Theil's U
+## Training set 0.4216185        NA
+## Test set     0.3094182  5.123387
+## [1] "Holt Winters Accuracy for  Portland, OR - Powellhurst-Gilbert"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set -3131.490 13712.03 10879.32 -1.400162 5.468285 0.4645938
+## Test set     -5037.925 14729.57 12773.45 -1.801687 4.761992 0.5454815
+##                     ACF1 Theil's U
+## Training set -0.07252899        NA
+## Test set     -0.03283277  1.315897
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-475.pdf}
+
+\begin{verbatim}
+## Warning in window.default(x, ...): 'end' value not changed
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-476.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-477.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-478.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-479.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-480.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-481.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - East Columbia"
+##                    ME     RMSE      MAE       MPE     MAPE    MASE
+## Training set 33456.25 70838.89 56014.58  8.269171 25.06827 1.00000
+## Test set     53685.86 72299.26 62242.86 14.650780 17.87984 1.11119
+##                    ACF1 Theil's U
+## Training set  0.2033004        NA
+## Test set     -0.1647591  1.638228
+## [1] "Holt Winters Accuracy for  Portland, OR - East Columbia"
+##                     ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set  15769.10 52881.18 38492.07   3.926723 17.47484 0.6871794
+## Test set     -35117.42 56367.01 50654.33 -11.890689 16.03386 0.9043060
+##                     ACF1 Theil's U
+## Training set -0.03952382        NA
+## Test set     -0.05885194  1.083608
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-482.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-483.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-484.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-485.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-486.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-487.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-488.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Humboldt"
+##                    ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set 49758.33 104162.4 79266.67 9.691465 17.46211 1.0000000
+## Test set     44975.00 101401.3 72750.00 7.364807 13.34101 0.9177881
+##                     ACF1 Theil's U
+## Training set  0.08741245        NA
+## Test set     -0.09014216  1.314892
+## [1] "Holt Winters Accuracy for  Portland, OR - Humboldt"
+##                     ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set  22419.33 73098.38 50244.07   3.768662 10.72731 0.6338613
+## Test set     -57130.57 72336.44 61804.62 -11.936765 12.71508 0.7797050
+##                     ACF1 Theil's U
+## Training set  0.04738651        NA
+## Test set     -0.30722831  0.830482
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-489.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-490.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-491.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-492.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-493.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-494.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-495.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Lair Hill"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 27137.50 31952.70 27137.50  7.009348  7.009348 1.000000
+## Test set     60218.75 63971.22 60218.75 12.672434 12.672434 2.219023
+##                     ACF1 Theil's U
+## Training set  0.07447470        NA
+## Test set     -0.06062551  2.489088
+## [1] "Holt Winters Accuracy for  Portland, OR - Lair Hill"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  4958.017 12685.85 11044.14 1.268259 2.854145 0.4069698
+## Test set     12953.835 24270.31 21812.73 2.709722 4.641760 0.8037857
+##                    ACF1 Theil's U
+## Training set -0.0798477        NA
+## Test set      0.1580840 0.8701521
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-496.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-497.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-498.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-499.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-500.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-501.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-502.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Mill Park"
+##                   ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 21387.5 32689.21 29579.58  9.616553 14.61266 1.000000
+## Test set     46100.0 46768.35 46100.00 16.727559 16.72756 1.558507
+##                    ACF1 Theil's U
+## Training set -0.1812565        NA
+## Test set      0.3562014  1.995955
+## [1] "Holt Winters Accuracy for  Portland, OR - Mill Park"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  6139.965 20645.99 18252.84 2.322491 9.682419 0.6170758
+## Test set     13067.245 17290.75 13799.45 4.816177 5.116321 0.4665193
+##                    ACF1 Theil's U
+## Training set -0.4266353        NA
+## Test set      0.5083674 0.5993603
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-503.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-504.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-505.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-506.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-507.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-508.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-509.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Russell"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 13904.17 29408.83 26307.92  5.33438 10.84498 1.000000
+## Test set     64635.00 71518.62 64635.00 19.57551 19.57551 2.456865
+##                    ACF1 Theil's U
+## Training set -0.5448111        NA
+## Test set      0.5878915  2.521108
+## [1] "Holt Winters Accuracy for  Portland, OR - Russell"
+##                     ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set  4522.405 19744.92 17923.20  1.612276  7.507908 0.6812853
+## Test set     49480.713 55614.80 49480.71 15.004678 15.004678 1.8808298
+##                    ACF1 Theil's U
+## Training set -0.3361938        NA
+## Test set      0.3724179  1.940859
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-510.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-511.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-512.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-513.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-514.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-515.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-516.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Hazelwood"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 23604.12 29223.79 24995.79 11.14149 11.80886 1.000000
+## Test set     55284.50 60769.56 55284.50 18.71870 18.71870 2.211752
+##                    ACF1 Theil's U
+## Training set -0.2552567        NA
+## Test set      0.2757737    3.1379
+## [1] "Holt Winters Accuracy for  Portland, OR - Hazelwood"
+##                    ME     RMSE       MAE      MPE     MAPE      MASE
+## Training set 1147.793 16543.37 12813.851 0.544829 6.415880 0.5126403
+## Test set     7703.344 13420.26  9703.192 2.461657 3.255483 0.3881930
+##                     ACF1 Theil's U
+## Training set 0.001479583        NA
+## Test set     0.089216233  0.684837
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-517.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-518.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-519.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-520.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-521.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-522.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-523.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Markham"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 16329.17 31226.41 22804.17  4.506217  6.338072 1.000000
+## Test set     55131.25 64989.07 55131.25 12.649964 12.649964 2.417595
+##                     ACF1 Theil's U
+## Training set -0.05445208        NA
+## Test set     -0.33063659  1.403775
+## [1] "Holt Winters Accuracy for  Portland, OR - Markham"
+##                     ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set  6736.682 21063.95 15055.11 1.821734 4.176288 0.6601912
+## Test set     40693.262 52691.00 40693.26 9.215956 9.215956 1.7844661
+##                    ACF1 Theil's U
+## Training set -0.2623946        NA
+## Test set     -0.3298312  1.146357
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-524.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-525.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-526.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-527.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-528.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-529.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-530.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - King"
+##                     ME      RMSE       MAE       MPE      MAPE     MASE
+## Training set  26245.83  37275.08  29670.83  6.873074  7.905346 1.000000
+## Test set     106543.75 114641.95 106543.75 20.814096 20.814096 3.590858
+##                    ACF1 Theil's U
+## Training set -0.4885715        NA
+## Test set     -0.3866040  1.961695
+## [1] "Holt Winters Accuracy for  Portland, OR - King"
+##                     ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set  5938.045 23719.33 19958.26  1.375725  5.409491 0.6726559
+## Test set     71001.520 80310.36 71001.52 13.746594 13.746594 2.3929736
+##                    ACF1 Theil's U
+## Training set -0.6303503        NA
+## Test set     -0.3556917  1.366595
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-531.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-532.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-533.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-534.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-535.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-536.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-537.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Kerns"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 43116.67 77063.84 61475.00 9.671159 15.62448 1.000000
+## Test set     47706.25 82357.99 71443.75 8.451589 14.14495 1.162159
+##                   ACF1 Theil's U
+## Training set 0.2799235        NA
+## Test set     0.2201735   1.20248
+## [1] "Holt Winters Accuracy for  Portland, OR - Kerns"
+##                      ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set  -7000.417 50118.56 38697.92  -2.463192 10.84795 0.6294903
+## Test set     -52102.500 95452.92 66439.06 -12.479888 15.19610 1.0807493
+##                   ACF1 Theil's U
+## Training set 0.1346555        NA
+## Test set     0.3940729  1.541982
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-538.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-539.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-540.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-541.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-542.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-543.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-544.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Beaumont-Wilshire"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 43308.33 90599.73 70475.00 7.699463 13.22416 1.000000
+## Test set     50009.38 80424.92 74021.88 8.418383 12.69926 1.050328
+##                    ACF1 Theil's U
+## Training set -0.2514371        NA
+## Test set     -0.2016649  1.694368
+## [1] "Holt Winters Accuracy for  Portland, OR - Beaumont-Wilshire"
+##                     ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set  18315.54 63500.92 55330.52   2.626853 10.37281 0.7851085
+## Test set     -64546.63 66698.26 64546.63 -11.241803 11.24180 0.9158798
+##                    ACF1 Theil's U
+## Training set -0.1213010        NA
+## Test set     -0.5837963   1.38488
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-545.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-546.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-547.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-548.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-549.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-550.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-551.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Multnomah Village"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 21850.00 39570.31 30408.25  6.354611  8.816651 1.000000
+## Test set     73903.12 78387.99 73903.12 17.327869 17.327869 2.430364
+##                    ACF1 Theil's U
+## Training set -0.2673270        NA
+## Test set      0.2501664  3.463188
+## [1] "Holt Winters Accuracy for  Portland, OR - Multnomah Village"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  3441.674 31609.92 26824.37 0.8591412 7.821608 0.8821412
+## Test set     24639.969 32370.52 28297.22 5.7272667 6.592889 0.9305772
+##                     ACF1 Theil's U
+## Training set -0.06268974        NA
+## Test set     -0.15030456  1.462412
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-552.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-553.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-554.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-555.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-556.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-557.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-558.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Homestead"
+##                     ME     RMSE      MAE         MPE      MAPE     MASE
+## Training set  111541.7 403013.0 211625.0   -3.610505  44.96526 1.000000
+## Test set     -280293.8 632615.9 422918.8 -118.607496 140.56496 1.998435
+##                    ACF1 Theil's U
+## Training set  0.1071213        NA
+## Test set     -0.2171330  5.168237
+## [1] "Holt Winters Accuracy for  Portland, OR - Homestead"
+##                      ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set   -3804.01 347840.4 214738.9 -37.77193 58.06019 1.014714
+## Test set     -216246.72 249357.4 216246.7 -76.85066 76.85066 1.021839
+##                     ACF1 Theil's U
+## Training set -0.09998965        NA
+## Test set      0.29122662   2.08793
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-559.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-560.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-561.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-562.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-563.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-564.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-565.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Sumner"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 24333.33 35743.39 27000.00 11.44901 12.99290 1.000000
+## Test set     61978.12 67297.16 61978.12 21.29717 21.29717 2.295486
+##                    ACF1 Theil's U
+## Training set -0.3487192        NA
+## Test set      0.3661510  2.034903
+## [1] "Holt Winters Accuracy for  Portland, OR - Sumner"
+##                    ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set 6090.531 25207.02 16979.33 2.840700 8.393886 0.6288641
+## Test set     8332.119 18160.36 15335.83 2.624475 5.154042 0.5679938
+##                     ACF1 Theil's U
+## Training set -0.31242619        NA
+## Test set      0.06675253 0.5722341
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-566.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-567.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-568.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-569.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-570.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-571.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-572.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Cathedral Park"
+##                    ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set 22391.67 42593.35 32066.67  8.284096 12.60717 1.000000
+## Test set     51003.12 80702.01 70865.62 11.997870 21.97775 2.209947
+##                    ACF1 Theil's U
+## Training set  0.2378759        NA
+## Test set     -0.2201887 0.8255507
+## [1] "Holt Winters Accuracy for  Portland, OR - Cathedral Park"
+##                      ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  -9453.806 33490.07 25029.97  -4.39613 10.24000 0.7805604
+## Test set     -32679.557 56000.30 40658.60 -13.76389 16.05852 1.2679396
+##                     ACF1 Theil's U
+## Training set  0.02027662        NA
+## Test set     -0.61372803  0.461156
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-573.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-574.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-575.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-576.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-577.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-578.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-579.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Collins View"
+##                    ME      RMSE      MAE       MPE     MAPE     MASE
+## Training set 29077.08  70337.81 59597.92  6.789877 16.02648 1.000000
+## Test set     87030.00 103203.92 87030.00 17.260582 17.26058 1.460286
+##                    ACF1 Theil's U
+## Training set 0.08695527        NA
+## Test set     0.22014748  2.696604
+## [1] "Holt Winters Accuracy for  Portland, OR - Collins View"
+##                    ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set 10860.53 47908.90 42033.82  1.738864 11.33564 0.7052901
+## Test set     67668.61 74390.27 67668.61 13.560997 13.56100 1.1354191
+##                     ACF1 Theil's U
+## Training set -0.04158258        NA
+## Test set      0.51058667   1.78953
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-580.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-581.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-582.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-583.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-584.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-585.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-586.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - North Tabor"
+##                    ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set 53416.62 78301.88 72766.62 13.379662 19.99934 1.0000000
+## Test set     38987.50 74494.99 56287.50  7.216654 11.40567 0.7735346
+##                    ACF1 Theil's U
+## Training set -0.2422235        NA
+## Test set     -0.2887973  1.225086
+## [1] "Holt Winters Accuracy for  Portland, OR - North Tabor"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  11062.33 45753.25 37116.06  2.546252 11.32352 0.5100699
+## Test set     -28706.33 70514.45 61781.84 -7.130384 13.31302 0.8490409
+##                    ACF1 Theil's U
+## Training set -0.2586917        NA
+## Test set     -0.2892384  1.151709
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-587.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-588.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-589.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-590.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-591.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-592.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-593.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Centennial"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 24079.08 25096.39 24079.08 12.51414 12.51414 1.000000
+## Test set     44706.50 47470.32 44706.50 16.77091 16.77091 1.856653
+##                     ACF1 Theil's U
+## Training set -0.05900897        NA
+## Test set      0.53951058  4.696885
+## [1] "Holt Winters Accuracy for  Portland, OR - Centennial"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  926.3939 8074.240 6877.031 0.6253252 3.706229 0.2856019
+## Test set     2993.8519 6408.189 5117.213 1.1381791 1.947079 0.2125169
+##                    ACF1 Theil's U
+## Training set  0.1277728        NA
+## Test set     -0.1962100 0.5629876
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-594.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-595.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-596.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-597.pdf}
+
+\begin{verbatim}
+## Warning in HoltWinters(trainingData): optimization difficulties: ERROR:
+## ABNORMAL_TERMINATION_IN_LNSRCH
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-598.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-599.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-600.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Far Southwest"
+##                    ME     RMSE      MAE      MPE     MAPE      MASE
+## Training set 24258.33 86404.43 71879.17 4.109130 19.64486 1.0000000
+## Test set     34200.00 57992.08 50450.00 6.810085 11.22565 0.7018724
+##                     ACF1 Theil's U
+## Training set  0.07011793        NA
+## Test set     -0.51874779 0.5730243
+## [1] "Holt Winters Accuracy for  Portland, OR - Far Southwest"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  21341.88 67844.49 52110.73  4.442712 13.70728 0.7249769
+## Test set     -24712.74 76419.08 56834.96 -7.399271 13.93995 0.7907014
+##                    ACF1 Theil's U
+## Training set -0.1107914        NA
+## Test set     -0.6015799 0.7597984
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-601.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-602.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-603.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-604.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-605.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-606.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-607.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Hillside"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 27766.67 139342.5 114608.3 2.515359 16.87335 1.000000
+## Test set     83480.00 182177.2 142980.0 8.807972 17.77891 1.247553
+##                    ACF1 Theil's U
+## Training set -0.6193701        NA
+## Test set     -0.3108434   1.24029
+## [1] "Holt Winters Accuracy for  Portland, OR - Hillside"
+##                     ME     RMSE      MAE        MPE     MAPE      MASE
+## Training set  5347.772 100860.6 81417.74 -0.4297091 12.10244 0.7103999
+## Test set     45550.996 116026.0 95437.21  4.2331608 11.87665 0.8327249
+##                     ACF1 Theil's U
+## Training set -0.54840214        NA
+## Test set      0.03650642 0.8531545
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-608.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-609.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-610.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-611.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-612.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-613.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-614.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Wilkes"
+##                    ME     RMSE      MAE       MPE      MAPE     MASE
+## Training set 19847.92 21632.65 19847.92  8.180524  8.180524 1.000000
+## Test set     53056.25 56157.58 53056.25 16.590031 16.590031 2.673139
+##                    ACF1 Theil's U
+## Training set -0.2491990        NA
+## Test set      0.2470694  3.209447
+## [1] "Holt Winters Accuracy for  Portland, OR - Wilkes"
+##                      ME     RMSE       MAE       MPE     MAPE      MASE
+## Training set   897.7884 10423.18  8718.565 0.4298426 3.660346 0.4392685
+## Test set     18603.6177 23078.73 20232.293 5.8138071 6.334733 1.0193661
+##                    ACF1 Theil's U
+## Training set -0.2661881        NA
+## Test set      0.0249140   1.32082
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-615.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-616.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-617.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-618.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-619.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-620.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-621.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Westmoreland"
+##                    ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set 47085.42 67411.00 55843.75 10.502570 12.706202 1.0000000
+## Test set     50175.00 72244.66 54325.00  9.117189  9.976307 0.9728036
+##                    ACF1 Theil's U
+## Training set 0.32989685        NA
+## Test set     0.03002371  0.923928
+## [1] "Holt Winters Accuracy for  Portland, OR - Westmoreland"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  11347.26 41044.96 34565.86  2.344187 8.157930 0.6189745
+## Test set     -22480.34 56352.16 50254.98 -5.070274 9.383106 0.8999214
+##                     ACF1 Theil's U
+## Training set  0.08295743        NA
+## Test set     -0.18541308 0.7701642
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-622.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-623.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-624.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-625.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-626.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-627.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-628.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Eliot"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 25087.50  61787.7 53770.83  5.08630 13.81511 1.000000
+## Test set     93431.25 108731.8 93431.25 17.23698 17.23698 1.737582
+##                   ACF1 Theil's U
+## Training set 0.2091346        NA
+## Test set     0.1143985  1.989893
+## [1] "Holt Winters Accuracy for  Portland, OR - Eliot"
+##                    ME     RMSE      MAE       MPE      MAPE      MASE
+## Training set  18639.7 54291.59 43846.10  3.549247 11.486342 0.8154254
+## Test set     -38457.4 62793.79 49997.42 -7.312011  9.459192 0.9298242
+##                      ACF1 Theil's U
+## Training set  0.003847561        NA
+## Test set     -0.231495662  1.238884
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-629.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-630.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-631.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-632.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-633.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-634.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-635.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Forest Highlands"
+##                    ME     RMSE      MAE      MPE     MAPE    MASE
+## Training set 67997.92 293014.1 236506.2 2.375785 35.42643 1.00000
+## Test set     99925.00 391107.0 299800.0 1.782014 33.04671 1.26762
+##                    ACF1 Theil's U
+## Training set -0.2183621        NA
+## Test set      0.1309136  1.275153
+## [1] "Holt Winters Accuracy for  Portland, OR - Forest Highlands"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  13250.29 258576.9 199314.6 -6.058812 30.36472 0.8427457
+## Test set     127060.50 336200.1 255000.4  6.257859 26.82285 1.0781973
+##                    ACF1 Theil's U
+## Training set -0.2980561        NA
+## Test set      0.1873498 0.9230892
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-636.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-637.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-638.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-639.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-640.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-641.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-642.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Southgate"
+##                    ME     RMSE      MAE      MPE     MAPE     MASE
+## Training set 22182.88 26809.47 23399.54 10.65047 11.30831 1.000000
+## Test set     56531.31 58836.08 56531.31 19.65547 19.65547 2.415915
+##                    ACF1 Theil's U
+## Training set  0.1079438        NA
+## Test set     -0.2199474   2.56688
+## [1] "Holt Winters Accuracy for  Portland, OR - Southgate"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set -3141.945 15547.99 12815.22 -1.421492 6.216560 0.5476698
+## Test set      4601.723 13066.88 12040.70  1.575108 4.175776 0.5145700
+##                     ACF1 Theil's U
+## Training set -0.12764617        NA
+## Test set      0.02797653 0.5662981
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-643.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-644.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-645.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-646.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-647.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-648.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-649.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Northwest District"
+##                   ME     RMSE     MAE       MPE     MAPE     MASE
+## Training set  9175.0 58770.21 51658.5  1.297466 10.20186 1.000000
+## Test set     89912.5 97103.88 89912.5 14.220569 14.22057 1.740517
+##                     ACF1 Theil's U
+## Training set -0.23950162        NA
+## Test set      0.02869029  1.464754
+## [1] "Holt Winters Accuracy for  Portland, OR - Northwest District"
+##                     ME     RMSE       MAE       MPE      MAPE      MASE
+## Training set  11640.55  40809.1  33790.04  1.757631  6.715441 0.6541043
+## Test set     106336.65 113289.4 106336.65 16.858966 16.858966 2.0584541
+##                     ACF1 Theil's U
+## Training set -0.13466638        NA
+## Test set      0.09811408  1.706976
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-650.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-651.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-652.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-653.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-654.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-655.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-656.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Hawthorne District"
+##                    ME     RMSE   MAE      MPE     MAPE     MASE       ACF1
+## Training set 38641.67 45786.48 38975 8.594287 8.685003 1.000000  0.1635997
+## Test set     52425.00 56370.71 52425 9.714578 9.714578 1.345093 -0.1343104
+##              Theil's U
+## Training set        NA
+## Test set      2.075264
+## [1] "Holt Winters Accuracy for  Portland, OR - Hawthorne District"
+##                      ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set   5011.352 17445.54 14431.33  1.182575 3.362453 0.3702715
+## Test set     -25232.558 34120.36 30756.33 -4.764211 5.781398 0.7891297
+##                     ACF1 Theil's U
+## Training set -0.18100149        NA
+## Test set     -0.02999711  1.139662
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-657.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-658.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-659.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-660.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-661.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-662.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-663.pdf}
+
+\begin{verbatim}
+## [1] "Seasonal Naive Accuracy for  Portland, OR - Dunthorpe"
+##                     ME     RMSE      MAE       MPE     MAPE     MASE
+## Training set  29083.33 228666.5 174750.0 0.1921085 14.93397 1.000000
+## Test set     165674.88 304571.0 256799.9 9.9274889 16.93057 1.469527
+##                    ACF1 Theil's U
+## Training set  0.3618090        NA
+## Test set     -0.1051666   1.22349
+## [1] "Holt Winters Accuracy for  Portland, OR - Dunthorpe"
+##                     ME     RMSE      MAE       MPE     MAPE      MASE
+## Training set  43399.39 172164.8 130533.5  3.227188 10.99628 0.7469727
+## Test set     242645.63 326671.8 279873.1 15.098100 17.96286 1.6015631
+##                     ACF1 Theil's U
+## Training set -0.18814191        NA
+## Test set     -0.02514386  1.292668
+\end{verbatim}
+
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-664.pdf}
+\includegraphics{ETM527-TeamRedfinNotebook_files/figure-latex/unnamed-chunk-4-665.pdf}
+
+\section{\texorpdfstring{\texttt{\{r\ child\ =\ \textquotesingle{}Redfin-Report-PracticePlotting.Rmd\textquotesingle{}\}\ \#}}{\{r child = 'Redfin-Report-PracticePlotting.Rmd'\} \#}}\label{r-child-redfin-report-practiceplotting.rmd}
+
+\section{\texorpdfstring{\texttt{\{r\ child\ =\ \textquotesingle{}Redfin-Report-Naive.Rmd\textquotesingle{}\}\ \#}}{\{r child = 'Redfin-Report-Naive.Rmd'\} \#}}\label{r-child-redfin-report-naive.rmd}
+
+\section{\texorpdfstring{\texttt{\{r\ child\ =\ \textquotesingle{}Redfin-Report-Seasonal-Naive.Rmd\textquotesingle{}\}\ \#}}{\{r child = 'Redfin-Report-Seasonal-Naive.Rmd'\} \#}}\label{r-child-redfin-report-seasonal-naive.rmd}
+
+\section{\texorpdfstring{\texttt{\{r\ child\ =\ \textquotesingle{}Redfin-Report-Drift.Rmd\textquotesingle{}\}\ \#}}{\{r child = 'Redfin-Report-Drift.Rmd'\} \#}}\label{r-child-redfin-report-drift.rmd}
+
+\section{\texorpdfstring{\texttt{\{r\ child\ =\ \textquotesingle{}Redfin-Report-HoltWinters.Rmd\textquotesingle{}\}\ \#}}{\{r child = 'Redfin-Report-HoltWinters.Rmd'\} \#}}\label{r-child-redfin-report-holtwinters.rmd}
+
+
+\end{document}
