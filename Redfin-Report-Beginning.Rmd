@@ -162,7 +162,7 @@ When plotting all this within the entire loop, we found that the Holt Winters an
 
 ```{r child = 'Redfin-Report-ModelAccuracy.Rmd'}
 ```
-
+<We need to write up what the accuracy means here!>
 
 ***
 
