@@ -1,4 +1,4 @@
-
+####Data Cleaning Processing 
 ```{r}
 #Load and Filter Data
 
@@ -30,9 +30,10 @@ print("Relavent Location variables summary")
 summary(Time_data.df)
 ```
 ***
+####Filter to final dataset
 ```{r}
 #Select only the final variables
-selected.var <-c(2, 6, 9, 24, 30, 33, 34, 35, 40, 41, 45)
+selected.var <-c(2, 6, 9, 24, 30, 33, 34, 35, 40)
 
 # filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about
 neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood", selected.var]

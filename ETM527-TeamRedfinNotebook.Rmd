@@ -18,17 +18,6 @@ suppressWarnings(suppressMessages(library(forecast)))
 ```
 
 ```{r}
-
-# filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about
-neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
-
-# load the training data list of unique neighborhoods into an array for iteration
- neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
-
-##Neighborhood Time Series Graphs
-```
-
-```{r}
 # Create a storage array for our results
 neighborhoodsSummary.array <- array()
 

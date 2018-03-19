@@ -1,9 +1,15 @@
 ```{r practice-plotting}
+library(readr)
 
-# load all redfin data into the data frame
-All_Redfin.df <- read.csv("RedfinDataDump.csv")
+RedfinDataDump.df <- read_csv("RedfinDataDump.csv")
+# filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about
+Oregon.df <- RedfinDataDump[RedfinDataDump$State == "Oregon",]
+Oregon.df <- na.omit(Oregon.df)
 
 selected.var <-c(2, 6, 9, 24, 30, 33, 34, 35, 40, 41, 45)
+neighborhoods.df <- Oregon.df[Oregon.df$Region.Type == "neighborhood",]
+Portland.df <- Oregon.df[Oregon.df$City =="Portland",]
+PortlandRegion <- Oregon.df[Oregon.df$Region == "Portland, OR",]
 #(2, 6, 9, 24, 27, 30, 39, 33, 34, 35, 40, 41, 45)
 
 # filter to just neighborhood records - the full set has by zipcode, and other breakdowns we don't care about
