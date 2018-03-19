@@ -1,0 +1,63 @@
+```{r model-accuracy}
+
+  #select a neighborhood into a dataframe
+  oneNeighborhood.df <- neighborhoods.df[Oregon.df$Region == neighborhood,]
+  
+  #filter out the observations for months that aren't January (1), April (4), July (7), October (10). 
+  #Note that had to invert, so selected ones that did not have these patterns matched.
+  oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin, invert = TRUE),]
+  # somehow they are out of order, now to sort the period.begin
+  oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format="%m/%d/%Y")),]
+
+  # select the median price column for the timeseries
+  oneNeighborhood.df <- oneNeighborhood.df[c(4)]
+  
+  # create the timeseries
+  oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+  
+  # divide the timeseries that was created into two parts
+  trainingData = window(oneNeighborhood.timeseries, start=c(2012,1), end=c(2015,4)) ### Training set (4 years, quarterly data)
+  testData = window(oneNeighborhood.timeseries, start=c(2016,1), end=c(2017,4), frequency=4)  ### Test set    (2 years, quarterly data)
+  
+  #Run Models on training data
+  #Seansonal Naive
+  naive.forecast <- naive(trainingData, h = 8)
+  snaive.forecast <- snaive(trainingData, h = 8 )
+  drift.forecast <- rwf(trainingData, h = 8, drift = T)
+  hwinters.forecast <- forecast(HoltWinters(trainingData), h = 8)
+
+  #Calculate accuracy
+  naive.accuracy <- accuracy(naive.forecast, testData)
+  snaive.accuracy <- accuracy(snaive.forecast, testData)
+  drift.accuracy <- accuracy(drift.forecast, testData)
+  hwinters.accuracy <- accuracy(hwinters.forecast, testData)
+  compare.accuracy <- rbind(naive.accuracy,snaive.accuracy,drift.accuracy,hwinters.accuracy)
+  print(compare.accuracy)
+  
+  # Forecast plot for Combined models ---------
+  plotTitle <- paste(neighborhood, ": Training Model Comparison")
+  # plots both the train data, test data and both predictions
+  plot(oneNeighborhood.timeseries, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
+  lines(naive.forecast$mean,col="brown", lty="dashed")
+  lines(snaive.forecast$mean,col="blue", lty="dashed")
+  lines(drift.forecast$mean,col="green", lty="dashed")
+  lines(hwinters.forecast$mean, col="orange", lty="dashed")
+  lines(testData, col="red") # color the test data to tell it from the train data
+  legend("topleft",lty=1,bty = "n",col=c("black", "red", "brown","blue", "green", "orange"),c("Train Data", "Test Data","Naive","Seasonal Naive","Drift", "Holt Winters"))
+```
+
+```{r}
+# Compare Accuracy --------------------------------------------------------
+  #print("Accuracy for Seasonal and Holt Winters")
+  # Seasonal Naive
+  print(paste("Seasonal Naive Accuracy for ", neighborhood))
+  print(snaive.accuracy)
+  
+  # Holt Winters
+  print(paste("Holt Winters Accuracy for ", neighborhood))
+  print(hwinters.accuracy)
+  
+  combined.accuracy <-rbind(snaive.accuracy, hwinters.accuracy)
+  #plot(snaive.accuracy)
+```
+

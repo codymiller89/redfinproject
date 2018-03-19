@@ -27,10 +27,16 @@ for (neighborhood in neighborhoods.array){
   
   # create the timeseries
   oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+    naive.forecast <- naive(trainingData, h = 16 )
   
   # Apply Forecasting Method to timeseries - Naive Method
   # 8 Periods
-  plot(naive(oneNeighborhood.timeseries, h = 8))
+# Forecast plot
+  plotTitle <- paste(neighborhood, ": Seasonal Naive Model Forecast")
+  options(scipen=999)
+  plot(naive.forecast, main=plotTitle, ylab = "Median House Price", xlab = "Year") # plots both the train data, test data and prediction
+  lines(testData, col="red") # color the test data to tell it from the train data
+  legend("topleft",lty=1,bty = "n",col=c("black", "red","blue"),c("Train Data", "Test Data","Seasonal Naive"))
   
   # 4 Periods
 #  plot(naive(oneNeighborhood.timeseries, h = 4))

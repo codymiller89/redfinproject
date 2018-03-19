@@ -1,0 +1,36 @@
+```{r practice-plotting}
+  #set plot options once
+
+  #select a neighborhood into a dataframe
+  oneNeighborhood.df <- neighborhoods.df[neighborhoods.df$Region == neighborhood,]
+
+  #filter out the observations for months that aren't January (1), April (4), July (7), October (10). 
+  #Note that had to invert, so selected ones that did not have these patterns matched.
+  oneNeighborhood.df<-oneNeighborhood.df[grep("2/|3/|5/|6/|8/|9/|11/|12/", oneNeighborhood.df$Period.Begin, invert = TRUE),]
+  # somehow they are out of order, now to sort the period.begin
+  oneNeighborhood.df <- oneNeighborhood.df[order(as.Date(oneNeighborhood.df$Period.Begin, format="%m/%d/%Y")),]
+  
+  # select the median price column for the timeseries
+  oneNeighborhood.df <- oneNeighborhood.df[c(4)]
+  
+  # create the timeseries
+  oneNeighborhood.timeseries <- ts(oneNeighborhood.df, frequency=4, start=c(2012,1))
+
+  # Naive Approach
+  # H = Number of periods for forecasting
+  plotTitle <- paste(neighborhood,": Naive Model")
+  plot(naive(oneNeighborhood.timeseries, h = 8),main=plotTitle)
+
+  # Seasonal Naive Method 
+  plotTitle <- paste(neighborhood,": Seasonal Naive Model")
+  plot(snaive(oneNeighborhood.timeseries, h = 8), main=plotTitle)
+
+  # Drift Method Method 
+  plotTitle <- paste(neighborhood,": Drift Model")
+  plot(rwf(oneNeighborhood.timeseries, h = 8, drift = T), main=plotTitle)
+
+  # Holt Winters Method 
+  plotTitle <- paste(neighborhood,": Holt Winters Model")
+  plot(forecast(HoltWinters(oneNeighborhood.timeseries), h = 8), main=plotTitle)
+
+```
