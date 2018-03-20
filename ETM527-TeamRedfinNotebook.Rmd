@@ -28,8 +28,6 @@ neighborhoodsSummary.array <- c("")
 neighborhoods.array <- unique(neighborhoods.df$Region, incomparables = FALSE)
 ```
 
-#```{r child = 'Redfin-Report-ForLoop.Rmd'}
-#```
 
 ```{r}
 # For loop
@@ -151,18 +149,4 @@ for (neighborhood in neighborhoods.array){
 }
 ```
 
-#```{r child = 'Redfin-Report-PracticePlotting.Rmd'}
-#```
-
-#```{r child = 'Redfin-Report-Naive.Rmd'}
-#```
-
-#```{r child = 'Redfin-Report-Seasonal-Naive.Rmd'}
-#```
-
-#```{r child = 'Redfin-Report-Drift.Rmd'}
-#```
-
-#```{r child = 'Redfin-Report-HoltWinters.Rmd'}
-#```
 

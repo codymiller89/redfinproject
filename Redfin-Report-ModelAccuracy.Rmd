@@ -1,3 +1,7 @@
+## Accuracy Evaluation
+For this evaluation we will use one of the neighborhoods: Lents. 
+The neighborhood will be selected and each of the models will be trained against the Lents training set. 
+
 ```{r model-accuracy}
 
   #select a neighborhood into a dataframe
@@ -18,6 +22,11 @@
   # divide the timeseries that was created into two parts
   trainingData = window(oneNeighborhood.timeseries, start=c(2012,1), end=c(2015,4)) ### Training set (4 years, quarterly data)
   testData = window(oneNeighborhood.timeseries, start=c(2016,1), end=c(2017,4), frequency=4)  ### Test set    (2 years, quarterly data)
+```
+For this project week looked at the following types of models: naive, seasonal naive, drift and Holt Winters. 
+We run each of these models against the training set. 
+  
+```{r}
   
   #Run Models on training data
   #Seansonal Naive
@@ -25,15 +34,18 @@
   snaive.forecast <- snaive(trainingData, h = 8 )
   drift.forecast <- rwf(trainingData, h = 8, drift = T)
   hwinters.forecast <- forecast(HoltWinters(trainingData), h = 8)
-
+```
+Next we calculate the accuracy for each of the forecasts of the above models against the test data which was held back from the training set.
+```{r}
   #Calculate accuracy
   naive.accuracy <- accuracy(naive.forecast, testData)
   snaive.accuracy <- accuracy(snaive.forecast, testData)
   drift.accuracy <- accuracy(drift.forecast, testData)
   hwinters.accuracy <- accuracy(hwinters.forecast, testData)
-  compare.accuracy <- rbind(naive.accuracy,snaive.accuracy,drift.accuracy,hwinters.accuracy)
-  print(compare.accuracy)
-  
+
+```
+An easy way to visually determine which of the models matches the test data the closest, is to compare the model forecast against the test data in a graph.
+```{r}
   # Forecast plot for Combined models ---------
   plotTitle <- paste(neighborhood, ": Training Model Comparison")
   # plots both the train data, test data and both predictions
@@ -45,19 +57,68 @@
   lines(testData, col="red") # color the test data to tell it from the train data
   legend("topleft",lty=1,bty = "n",col=c("black", "red", "brown","blue", "green", "orange"),c("Train Data", "Test Data","Naive","Seasonal Naive","Drift", "Holt Winters"))
 ```
+We can see in this graph, that the dotted orange line, for Holt Winters most closely follows the red solid line representing the test data. The Naive line is useless as it is simply the last value in the Training data. The green line for Drift seems to follow our test data as a trend line rather well. The Seasonal Naive line is somewhat better than pure naive, as it generally follows the seasonality of the test data, if not the scale.
 
+Now let's look at the actual accuracy for each of the models for this neighborhood.
+
+### Seasonal Naive
+
+We can see that seasonal naive has a RMSE of 30584 for the training set and 58482 for the test set. 
+
+The ACF is 0.3094 for training and 0.4584 for the test set. 
 ```{r}
-# Compare Accuracy --------------------------------------------------------
-  #print("Accuracy for Seasonal and Holt Winters")
   # Seasonal Naive
   print(paste("Seasonal Naive Accuracy for ", neighborhood))
-  print(snaive.accuracy)
-  
+  print(snaive.accuracy)  
+  plotTitle <- paste(neighborhood, ": Seasonal Naive Model Residuals")
+  options(scipen=999)
+  tsdisplay(residuals(naive.forecast), main = paste(plotTitle, " Residuals"))
+```
+
+###  Naive
+Naive has a RMSE of 11738.18 for the training set and 49342.8 for the test set. 
+
+The ACF is -0.2522954 for training and 0.5108548 for the test set. 
+
+```{r} 
+#  Naive
+  print(paste("Naive Accuracy for ", neighborhood))
+  print(naive.accuracy)
+  plotTitle <- paste(neighborhood, ": Naive Model Residuals")
+  options(scipen=999)
+  tsdisplay(residuals(naive.forecast), main = paste(plotTitle, " Residuals"))
+```
+
+### Holt Winters 
+Holt Winters has a RMSE of 10710.34 for the training set and 9232.58 for the test set. 
+
+The ACF is 0.2502565 for training and -0.357791 for the test set. 
+
+This is much better than seasonal Naive or Naive.
+```{r}
   # Holt Winters
   print(paste("Holt Winters Accuracy for ", neighborhood))
   print(hwinters.accuracy)
-  
-  combined.accuracy <-rbind(snaive.accuracy, hwinters.accuracy)
-  #plot(snaive.accuracy)
+  plotTitle <- paste(neighborhood, ": Holt Winters Model Residuals")
+  options(scipen=999)
+  tsdisplay(residuals(hwinters.forecast), main = paste(plotTitle, " Residuals"))
+```
+### Drift 
+Drift  has a RMSE of 9710.479 for the training set and  18819.398 for the test set. 
+
+The ACF is  -0.25229542 for training and  -0.0709451 for the test set. 
+
+This is much better than seasonal Naive or Naive.
+```{r}
+    # Drift
+  print(paste("Drift Accuracy for ", neighborhood))
+  print(drift.accuracy)
+  plotTitle <- paste(neighborhood, ": Drift Model Residuals")
+  options(scipen=999)
+  tsdisplay(residuals(drift.forecast), main = paste(plotTitle, " Residuals"))
+
 ```
 
+For accurate forecasting, we have chosen Holt Winters as the most accurate model, for this neighborhood as well as a random sampling of others in the set of neighborhoods. 
+
+For this paper, we have chosen to compare Holt Winters, our most accurate model, against Seasonal Naive. Seasonal Naive is the most accurate of the two naive models. Drift is a useful trend line but doesn't give the detail that holt winters provides for seasonal dips and peaks. 
