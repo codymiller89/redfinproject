@@ -34,7 +34,7 @@
   compare.accuracy <- rbind(naive.accuracy,snaive.accuracy,drift.accuracy,hwinters.accuracy)
   print(compare.accuracy)
   
-  # Forecast plot for Combined models ---------
+  # Forecast plot for comparing models ---------
   plotTitle <- paste(neighborhood, ": Training Model Comparison")
   # plots both the train data, test data and both predictions
   plot(oneNeighborhood.timeseries, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
