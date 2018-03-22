@@ -86,20 +86,6 @@ Year  | Average Mortgage Rate | Portland Median Family Income | Average Monthly 
 
 ***
 
-Based on an average family income of $83,253 in 2017. A family would be able 
-to afford a $381,487 house in Portland with a mortgage of $334,638 at 3.99% rate. 
-This comes out to a monthly mortgage of $1,596. 
-Since the average house price varies by neighborhood from the low 100k to 
-the high 2million in 2017 only the neighborhoods that fall under $381,487 would be 
-affordable for a median income family.
-In 2019 the average family income would've risen to $87,919 making it possible 
-for a median income family to afford a $395,189 house. As house prices in 
-Portland continue to climb the number of affordable houses that a median income 
-family can afford is only diminishing. This affordability is compared and shown 
-in the time series graphs of each neighborhood.
-
-***
-
 ###Assumptions
 1. Average Mortgage Rate was the annual average for 30-year fixed rate mortgages as reported by Freddie Mac.
     + We used a naive forecast for future annual mortgage rates, pegged to the current rate.

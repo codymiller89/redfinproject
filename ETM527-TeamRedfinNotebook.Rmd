@@ -64,13 +64,10 @@ for (neighborhood in neighborhoods.array){
   trainingData = window(oneNeighborhood.timeseries, start=c(2012,1), end=c(2015,4)) ### Training set (4 years, quarterly data)
   testData = window(oneNeighborhood.timeseries, start=c(2016,1), end=c(2017,4), frequency=4)  ### Test set    (2 years, quarterly data)
   
-  # Generic plot of timeseries with affordability line---------------------
+  # Generic plot of timeseries without any modeling ---------------------
   
-# plot and set title to the appropriate heading
-plot(oneNeighborhood.timeseries, main=neighborhood)
-afford <- c(350088, 337433, 329225, 363392, 395169, 381487, 384703, 395189, 405675)
-lines(afford, type="o", pch=22, lty=2, col="red")
-legend("topleft",lty=1,bty = "n",col=c("black", "red",cex=0.8),c("Time Series","Affordability"))
+  # plot and set title to the appropriate heading
+  plot(oneNeighborhood.timeseries, main=neighborhood)
   
   
   # Seasonal Naive Plots --------------------------------------------------
