@@ -7,7 +7,7 @@ The neighborhood will be selected and each of the models will be trained against
 
 Mean Absolute Error (MAE) and Root mean squared error (RMSE) are popular to use with forecasting on a single data set, in this case: Lents. MAE and RMSE are scale-dependent, so would be appropriate to compare the models within a single neighborhood. However if we want to compare across neighborhoods, then we would use a metric based on percentage which is more appropriate for the different median house price scales of different neighborhoods. 
 
-Auto Correlation Function (ACF) is a way give correlations between the series at lagged values of the series (seasonality). None of the corrlations look significant, which is what we want. 
+Auto Correlation Function (ACF) is a way give correlations between the series at lagged values of the series (seasonality). None of the correlations look significant, which is what we want. 
 
 ```{r model-accuracy}
 
