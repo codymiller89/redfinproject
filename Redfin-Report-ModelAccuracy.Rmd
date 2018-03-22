@@ -7,6 +7,8 @@ The neighborhood will be selected and each of the models will be trained against
 
 Mean Absolute Error (MAE) and Root mean squared error (RMSE) are popular to use with forecasting on a single data set, in this case: Lents. MAE and RMSE are scale-dependent, so would be appropriate to compare the models within a single neighborhood. However if we want to compare across neighborhoods, then we would use a metric based on percentage which is more appropriate for the different median house price scales of different neighborhoods. 
 
+Auto Correlation Function (ACF) is a way give correlations between the series at lagged values of the series (seasonality). None of the corrlations look significant, which is what we want. 
+
 ```{r model-accuracy}
 
   #select a neighborhood into a dataframe
@@ -53,7 +55,7 @@ Next we calculate the accuracy for each of the forecasts of the above models aga
 ```
 An easy way to visually determine which of the models matches the test data the closest, is to compare the model forecast against the test data in a graph.
 ```{r}
-  # Forecast plot for Combined models ---------
+  # Forecast plot for comparing models ---------
   plotTitle <- paste(neighborhood, ": Training Model Comparison")
   # plots both the train data, test data and both predictions
   plot(oneNeighborhood.timeseries, main=plotTitle, ylab = "Median House Price", xlab = "Year") 
@@ -136,6 +138,8 @@ Drift        | 	9710.479     | 18819.398     | -0.25229542  | -0.0709451
 Holt Winters | 	10710.34     | 9232.58       |  0.2502565   | -0.357791
 
 
-For accurate forecasting, we have chosen Holt Winters as the most accurate model, for this neighborhood as well as a random sampling of others in the set of neighborhoods. The test set RMSE was the best for this model. 
+For accurate forecasting, we have chosen Holt Winters as the most accurate model, for this neighborhood as well as a random sampling of others in the set of neighborhoods. The test set RMSE was the best for this model. Notice that Holt Winters has a test set RMSE of 9232. This is the least RMSE for any of the models. For Holt Winters the training RMSE was only very slightly higher than Drift, and slightly under Naive. Suprisingly, Seasonal Naive was significantly off, but not as bad overall as general naive modeling.
 
-For this paper, we have chosen to compare Holt Winters, our most accurate model, against Seasonal Naive. Seasonal Naive is the most accurate of the two naive models. Drift is a useful trend line but doesn't give the detail that holt winters provides for seasonal dips and peaks. 
+For this paper, we have chosen to compare Holt Winters, our most accurate model, against Seasonal Naive. Seasonal Naive is the most accurate of the two naive models and similar to Holt Winters accounts for seasonality. Drift is a useful trend line but doesn't give the detail that holt winters provides for seasonal dips and peaks. It may be useful for determining generalized trends in home prices, which for some consumers of this data may be enough (ie. homeowners wanting to know if their property is going up or down in price, but not looking to sell in a certain season).
+
+Recommended future work, which this project did not have time for, would be to calculate the mean of the RMSE values for each model across the entire set of neighborhoods. This would allow us to more accurately examine which model fit the most neighborhoods properly, which our sample could not properly extrapolate. By adding the Training RMSE and Test RMSE to an array through rbind, which was updated on each pass through the for-loop (from the appendix), we could compare the RMSE values across neighborhoods effectively.
