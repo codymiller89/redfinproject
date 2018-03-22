@@ -1,13 +1,18 @@
 ##References<a name="References"></a>
-[1] https://www.forbes.com/pictures/mhj45mhlf/10-portland-or/#2887f4ca560b
-[2] https://www.oregonmetro.gov/urban-growth-boundary
-[3] https://projects.oregonlive.com/maps/gentrification/
-[4] https://www.portlandoregon.gov/bps/article/454027
-[5] https://www.zillow.com/zestimate/#acc
-[6] https://www.zillow.com/portland-or/home-values/
-[7] https://www.pdxmonthly.com/articles/2017/3/22/portland-neighborhoods-by-the-numbers-2017-the-city
-[8] https://us.spindices.com/indices/real-estate/sp-corelogic-case-shiller-portland-home-price-nsa-index
-[9] 
-[10]
-[11]
-[12]
+[1] M. Brennan, “Portland, OR - pg.11,” Forbes, 24-Jan-2013. [Online]. Available: https://www.forbes.com/pictures/mhj45mhlf/10-portland-or/#2887f4ca560b. [Accessed: 22-Mar-2018]. 
+
+[2] C. Rojas, N. Christensen, and R. Hamilton, “Urban growth boundary,” Metro, 02-Jan-2018. [Online]. Available: https://www.oregonmetro.gov/urban-growth-boundary. [Accessed: 22-Mar-2018]. 
+
+[3] “Interactive map: Portland neighborhoods at risk of gentrification,” The Oregonian - OregonLive.com. [Online]. Available: https://projects.oregonlive.com/maps/gentrification/. [Accessed: 22-Mar-2018]. 
+
+[4] Bates, Lisa K. “Gentrification and Displacement Study: Implementing an Equitable Inclusive Development Strategy in the Context of Gentrification.” PDXScholar, pdxscholar.library.pdx.edu/usp_fac/83/.
+
+[5] Zillow, Inc, “What is a Zestimate? Zillow's Zestimate Accuracy,” Zillow. [Online]. Available: https://www.zillow.com/zestimate/#acc. [Accessed: 22-Mar-2018]. 
+
+[6] Zillow, Inc, “Portland OR Home Prices & Home Values,” Zillow. [Online]. Available: https://www.zillow.com/portland-or/home-values/. [Accessed: 22-Mar-2018].
+
+[7] “Portland Neighborhoods by the Numbers 2017: The Suburbs,” Portland Monthly, 22-Mar-2017. [Online]. Available: https://www.pdxmonthly.com/articles/2017/3/22/portland-neighborhoods-by-the-numbers-2017-the-suburbs. [Accessed: 22-Mar-2018].
+
+[8] “S&P Dow Jones Indices,” S&P CoreLogic Case-Shiller Portland Home Price NSA Index. [Online]. Available: https://us.spindices.com/indices/real-estate/sp-corelogic-case-shiller-portland-home-price-nsa-index. [Accessed: 22-Mar-2018]. 
+
+[9] “Data Center - Redfin Real-Time Housing Market Data,” Redfin Real-Time. [Online]. Available: https://www.redfin.com/blog/data-center. [Accessed: 22-Mar-2018].
