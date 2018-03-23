@@ -178,13 +178,18 @@ Solid predictions of demands, and forecasts are no longer considered a "nice to 
 
 Many forecasting techniqies have been developed over the years, but forecasts are not a "one size fits all". As our team has found out, the selection of a forecasting method, and its accuracy depends on several variables. The context of the forecast, relevance of historical data, the degree of accuracy you are looking for in your forecast, the time period, cost/benefit of the forecast to your company, and the time available to make your forecasts. 
 
-Our team choose to leverage 4 forecasts, to predict Portland Housing prices. In any business situation, one cannot blindly run forecasts, and make large decisions based off those forecasts, without properly validting each forecast, to determine which is most accurate, for your business to use. For the Portland housing market, one Forecasting method consistantly outranked others, accross 95 neighboorhoods, with regards to forecasting accuracy: Hold Winters Method. What does this mean? When looking at historical data we already know about, Holt Winters was considered a more accurate predictor, then all other forecast methods. 
+Our team choose to leverage 4 forecasts, to predict Portland Housing prices. In any business situation, one cannot blindly run forecasts, and make large decisions based off those forecasts, without properly validting each forecast, to determine which is most accurate, for your business to use. 
 
-There is an important takeaway here though, just because we have determined Holt Winters Method to be the most "accurate" forecast, for out specific forecast, does not mean this is what will happen in real-life, this is a tool, making assumptions on what MAY happen in the forecast. As ETM students, its important to manage tools like these forecasts, the forecasts, should not manage us, but instead, be a guide, for making better, data-driven decisions. 
+For the Portland housing market, one Forecasting method consistantly outranked others, accross 95 neighboorhoods, with regards to forecasting accuracy: Hold Winters Method. What does this mean? When looking at historical data we already know about, Holt Winters was considered a more accurate predictor, then all other forecast methods. 
+
+There is an important takeaway here though, just because we have determined Holt Winters Method to be the most "accurate" forecast, for our specific timeseries, does not mean this is what will happen in real-life. This is a tool, making assumptions on what MAY happen in the forecast.
+
+As ETM students, its important to manage tools like these forecasts, the forecasts, should not manage us, but instead, be a guide, for making better, data-driven decisions. 
+
+Additionally, analyzing 4 forecasting methods, accross Portland neighboorhoods, yielded another insight - Portland housing prices continue to climb faster then the National Average. This trend has appeared to be more pronounced in lower-priced neighborhoods. Accross all of these neighboorhoods we have observed rapid growth, reaching price elasticity, and at price elasticity. 
 
 
 
-During the course of this project, our team was able to observe several trends occuring in the Portland housing market. 
 
 ##References
 ```{r child = 'Redfin-Report-References.Rmd'}
